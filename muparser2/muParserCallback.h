@@ -47,7 +47,7 @@ namespace mu
 
     \author (C) 2004-2011 Ingo Berg
 */
-class ParserCallback
+class API_EXPORT_CXX ParserCallback
 {
 public:
     ParserCallback(fun_type0  a_pFun, bool a_bAllowOpti);
@@ -79,6 +79,8 @@ public:
     ParserCallback(strfun_type1 a_pFun, bool a_bAllowOpti);
     ParserCallback(strfun_type2 a_pFun, bool a_bAllowOpti);
     ParserCallback(strfun_type3 a_pFun, bool a_bAllowOpti);
+    ParserCallback(strfun_type4 a_pFun, bool a_bAllowOpti);
+    ParserCallback(strfun_type5 a_pFun, bool a_bAllowOpti);
     ParserCallback();
     ParserCallback(const ParserCallback &a_Fun);
     

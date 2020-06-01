@@ -146,6 +146,8 @@ namespace mu
       iStat += EqnTest(_T("strfun1(\"100\")"), 100, true);
       iStat += EqnTest(_T("strfun2(\"100\",1)"), 101, true);
       iStat += EqnTest(_T("strfun3(\"99\",1,2)"), 102, true);
+      iStat += EqnTest(_T("strfun4(\"99\",1,2,3)"), 105, true);
+      iStat += EqnTest(_T("strfun5(\"99\",1,2,3,4)"), 109, true);
       // string constants
       iStat += EqnTest(_T("atof(str1)+atof(str2)"), 3.33, true);
 
@@ -734,7 +736,7 @@ namespace mu
       iStat += EqnTest( _T("(-3)^2"),9, true);
       iStat += EqnTest( _T("-(-2^2)"),4, true);
       iStat += EqnTest( _T("3+-3^2"),-6, true);
-      // The following assumes use of sqr as postfix operator ("§") together
+      // The following assumes use of sqr as postfix operator together
       // with a sign operator of low priority:
       iStat += EqnTest( _T("-2'"), -4, true);
       iStat += EqnTest( _T("-(1+1)'"),-4, true);
@@ -948,7 +950,7 @@ namespace mu
       iStat += EqnTest(_T("(a>b) ? sum(3, (a<b) ? 3 : 10,10,20)*10 : 99"), 99, true);
       iStat += EqnTest(_T("(a>b) ? sum(3, (a<b) ? 3 : 10,10,20)*10 : sum(3, (a<b) ? 3 : 10)*10"), 60, true);
 
-      // todo: auch für muParserX hinzufügen!
+      // todo: also add for muParserX!
       iStat += EqnTest(_T("(a<b)&&(a<b) ? 128 : 255"), 128, true);
       iStat += EqnTest(_T("(a>b)&&(a<b) ? 128 : 255"), 255, true);
       iStat += EqnTest(_T("(1<2)&&(1<2) ? 128 : 255"), 128, true);
@@ -1102,7 +1104,7 @@ namespace mu
     }
 
     //---------------------------------------------------------------------------
-    void ParserTester::Run()
+    int ParserTester::Run()
     {
       int iStat = 0;
       try
@@ -1138,6 +1140,7 @@ namespace mu
                   << " expressions)" << endl;
       }
       ParserTester::c_iCount = 0;
+      return iStat;
     }
 
 
@@ -1161,6 +1164,8 @@ namespace mu
         p.DefineFun( _T("strfun1"), StrFun1);
         p.DefineFun( _T("strfun2"), StrFun2);
         p.DefineFun( _T("strfun3"), StrFun3);
+        p.DefineFun( _T("strfun4"), StrFun4);
+        p.DefineFun( _T("strfun5"), StrFun5);
         p.SetExpr(a_str);
         p.Eval();
       }
@@ -1258,7 +1263,7 @@ namespace mu
 
       try
       {
-        std::auto_ptr<Parser> p1;
+        std::unique_ptr<Parser> p1;
         Parser  p2, p3;   // three parser objects
                           // they will be used for testing copy and assignment operators
         // p1 is a pointer since i'm going to delete it in order to test if
@@ -1318,6 +1323,8 @@ namespace mu
         p1->DefineFun( _T("strfun1"), StrFun1);
         p1->DefineFun( _T("strfun2"), StrFun2);
         p1->DefineFun( _T("strfun3"), StrFun3);
+        p1->DefineFun( _T("strfun4"), StrFun4);
+        p1->DefineFun( _T("strfun5"), StrFun5);
         p1->DefineFun( _T("lastArg"), LastArg);
         p1->DefineFun( _T("firstArg"), FirstArg);
         p1->DefineFun( _T("order"), FirstArg);
@@ -1349,25 +1356,25 @@ namespace mu
           // Test copy constructor
           std::vector<mu::Parser> vParser;
           vParser.push_back(*(p1.get()));
-          mu::Parser p2 = vParser[0];   // take parser from vector
+          mu::Parser p4 = vParser[0];   // take parser from vector
         
           // destroy the originals from p2
           vParser.clear();              // delete the vector
           p1.reset(0);
 
-          fVal[2] = p2.Eval();
+          fVal[2] = p4.Eval();
 
           // Test assignment operator
           // additionally  disable Optimizer this time
-          mu::Parser p3;
-          p3 = p2;
-          p3.EnableOptimizer(false);
-          fVal[3] = p3.Eval();
+          mu::Parser p5;
+          p5 = p4;
+          p5.EnableOptimizer(false);
+          fVal[3] = p5.Eval();
 
           // Test Eval function for multiple return values
           // use p2 since it has the optimizer enabled!
           int nNum;
-          value_type *v = p2.Eval(nNum);
+          value_type *v = p4.Eval(nNum);
           fVal[4] = v[nNum-1];
         }
         catch(std::exception &e)
@@ -1384,10 +1391,14 @@ namespace mu
           // The tests equations never result in infinity, if they do thats a bug.
           // reference:
           // http://sourceforge.net/projects/muparser/forums/forum/462843/topic/5037825
+          #ifdef _MSC_VER
           #pragma warning(push)
           #pragma warning(disable:4127)
+          #endif
 		  if (std::numeric_limits<value_type>::has_infinity)
+          #ifdef _MSC_VER
           #pragma warning(pop)
+          #endif
 		  {
             bCloseEnough &= (fabs(fVal[i]) != numeric_limits<value_type>::infinity());
 		  }

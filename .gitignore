@@ -17,3 +17,11 @@ math-parser-benchmark-project/Release/asm-bits.obj
 *.ipch
 *.db-wal
 .vs/math-parser-benchmark-project_msvc2017/v16/.suo
+*.ilk
+*.sqlite
+*.json
+*.idb
+muparser2/.vs/muparser2/v16/.suo
+.vs/math-parser-benchmark-project_msvc/v16/.suo
+math-parser-benchmark-project/.vs/math-parser-benchmark-project/v16/.suo
+math-parser-benchmark-project/Debug/math-parser-benchmark-project_msvc2017.vcxproj.FileListAbsolute.txt

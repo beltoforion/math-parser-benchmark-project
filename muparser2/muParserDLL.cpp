@@ -110,13 +110,13 @@ static muChar_t s_tmpOutBuf[2048];
 //---------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------
-muParser_t* AsParser(muParserHandle_t a_hParser)
+inline muParser_t* AsParser(muParserHandle_t a_hParser)
 {
     return static_cast<ParserTag*>(a_hParser)->pParser;
 }
 
 //---------------------------------------------------------------------------
-ParserTag* AsParserTag(muParserHandle_t a_hParser)
+inline ParserTag* AsParserTag(muParserHandle_t a_hParser)
 {
     return static_cast<ParserTag*>(a_hParser);
 }
@@ -769,7 +769,7 @@ API_EXPORT(void) mupGetVar(muParserHandle_t a_hParser,
     const muChar_t **a_szName,
     muFloat_t **a_pVar)
 {
-    // A static buffer is needed for the name since i cant return the
+    // A static buffer is needed for the name since i can't return the
     // pointer from the map.
     static muChar_t  szName[1024];
 
@@ -846,7 +846,7 @@ API_EXPORT(void) mupGetExprVar(muParserHandle_t a_hParser,
     const muChar_t **a_szName,
     muFloat_t **a_pVar)
 {
-    // A static buffer is needed for the name since i cant return the
+    // A static buffer is needed for the name since i can't return the
     // pointer from the map.
     static muChar_t  szName[1024];
 
@@ -945,7 +945,7 @@ API_EXPORT(void) mupGetConst(muParserHandle_t a_hParser,
     const muChar_t **a_pszName,
     muFloat_t *a_fVal)
 {
-    // A static buffer is needed for the name since i cant return the
+    // A static buffer is needed for the name since i can't return the
     // pointer from the map.
     static muChar_t szName[1024];
 

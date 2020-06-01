@@ -36,8 +36,8 @@
     \brief This file contains standard definitions used by the parser.
 */
 
-#define MUP_VERSION _T("2.2.5")
-#define MUP_VERSION_DATE _T("20150427; GC")
+#define MUP_VERSION _T("2.2.6")
+#define MUP_VERSION_DATE _T("20181004")
 
 #define MUP_CHARS _T("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
@@ -248,13 +248,13 @@ namespace mu
 
   /** \brief The stringtype used by the parser. 
 
-    Depends on wether UNICODE is used or not.
+    Depends on whether UNICODE is used or not.
   */
   typedef MUP_STRING_TYPE string_type;
 
   /** \brief The character type used by the parser. 
   
-    Depends on wether UNICODE is used or not.
+    Depends on whether UNICODE is used or not.
   */
   typedef string_type::value_type char_type;
 
@@ -297,19 +297,19 @@ namespace mu
   /** \brief Callback type used for functions with five arguments. */
   typedef value_type (*fun_type5)(value_type, value_type, value_type, value_type, value_type);
 
-  /** \brief Callback type used for functions with five arguments. */
+  /** \brief Callback type used for functions with six arguments. */
   typedef value_type (*fun_type6)(value_type, value_type, value_type, value_type, value_type, value_type);
 
-  /** \brief Callback type used for functions with five arguments. */
+  /** \brief Callback type used for functions with seven arguments. */
   typedef value_type (*fun_type7)(value_type, value_type, value_type, value_type, value_type, value_type, value_type);
 
-  /** \brief Callback type used for functions with five arguments. */
+  /** \brief Callback type used for functions with eight arguments. */
   typedef value_type (*fun_type8)(value_type, value_type, value_type, value_type, value_type, value_type, value_type, value_type);
 
-  /** \brief Callback type used for functions with five arguments. */
+  /** \brief Callback type used for functions with nine arguments. */
   typedef value_type (*fun_type9)(value_type, value_type, value_type, value_type, value_type, value_type, value_type, value_type, value_type);
 
-  /** \brief Callback type used for functions with five arguments. */
+  /** \brief Callback type used for functions with ten arguments. */
   typedef value_type (*fun_type10)(value_type, value_type, value_type, value_type, value_type, value_type, value_type, value_type, value_type, value_type);
 
   /** \brief Callback type used for functions without arguments. */
@@ -330,19 +330,19 @@ namespace mu
   /** \brief Callback type used for functions with five arguments. */
   typedef value_type (*bulkfun_type5)(int, int, value_type, value_type, value_type, value_type, value_type);
 
-  /** \brief Callback type used for functions with five arguments. */
+  /** \brief Callback type used for functions with six arguments. */
   typedef value_type (*bulkfun_type6)(int, int, value_type, value_type, value_type, value_type, value_type, value_type);
 
-  /** \brief Callback type used for functions with five arguments. */
+  /** \brief Callback type used for functions with seven arguments. */
   typedef value_type (*bulkfun_type7)(int, int, value_type, value_type, value_type, value_type, value_type, value_type, value_type);
 
-  /** \brief Callback type used for functions with five arguments. */
+  /** \brief Callback type used for functions with eight arguments. */
   typedef value_type (*bulkfun_type8)(int, int, value_type, value_type, value_type, value_type, value_type, value_type, value_type, value_type);
 
-  /** \brief Callback type used for functions with five arguments. */
+  /** \brief Callback type used for functions with nine arguments. */
   typedef value_type (*bulkfun_type9)(int, int, value_type, value_type, value_type, value_type, value_type, value_type, value_type, value_type, value_type);
 
-  /** \brief Callback type used for functions with five arguments. */
+  /** \brief Callback type used for functions with ten arguments. */
   typedef value_type (*bulkfun_type10)(int, int, value_type, value_type, value_type, value_type, value_type, value_type, value_type, value_type, value_type, value_type);
 
   /** \brief Callback type used for functions with a variable argument list. */
@@ -356,6 +356,12 @@ namespace mu
 
   /** \brief Callback type used for functions taking a string and two values as arguments. */
   typedef value_type (*strfun_type3)(const char_type*, value_type, value_type);
+
+   /** \brief Callback type used for functions taking a string and a value as arguments. */
+  typedef value_type (*strfun_type4)(const char_type*, value_type, value_type, value_type);
+
+  /** \brief Callback type used for functions taking a string and two values as arguments. */
+  typedef value_type (*strfun_type5)(const char_type*, value_type, value_type, value_type, value_type);
 
   /** \brief Callback used for functions that identify values in a string. */
   typedef int (*identfun_type)(const char_type *sExpr, int *nPos, value_type *fVal);

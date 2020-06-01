@@ -59,7 +59,7 @@ namespace mu
   Complementary to a set of internally implemented functions the parser is able to handle 
   user defined functions and variables. 
 */
-class ParserBase 
+class API_EXPORT_CXX ParserBase
 {
 friend class ParserTokenReader;
 
@@ -86,7 +86,7 @@ private:
     typedef ParserToken<value_type, string_type> token_type;
 
     /** \brief Maximum number of threads spawned by OpenMP when using the bulk mode. */
-    static const int s_MaxNumOpenMPThreads = 16;
+    static const int s_MaxNumOpenMPThreads;
 
  public:
 
@@ -288,7 +288,7 @@ private:
     mutable stringbuf_type  m_vStringBuf; ///< String buffer, used for storing string function arguments
     stringbuf_type  m_vStringVarBuf;
 
-    std::auto_ptr<token_reader_type> m_pTokenReader; ///< Managed pointer to the token reader object.
+    std::unique_ptr<token_reader_type> m_pTokenReader; ///< Managed pointer to the token reader object.
 
     funmap_type  m_FunDef;         ///< Map of function names and pointers.
     funmap_type  m_PostOprtDef;    ///< Postfix operator callbacks
@@ -314,4 +314,3 @@ private:
 } // namespace mu
 
 #endif
-

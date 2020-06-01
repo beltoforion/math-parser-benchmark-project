@@ -62,6 +62,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
       <AdditionalIncludeDirectories>..\;..\include;..\mpfr;..\metl;</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -105,61 +106,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\AsmJit\AsmJit.h" />
-    <ClInclude Include="..\AsmJit\Assembler.h" />
-    <ClInclude Include="..\AsmJit\AssemblerX86X64.h" />
-    <ClInclude Include="..\AsmJit\Build.h" />
-    <ClInclude Include="..\AsmJit\Compiler.h" />
-    <ClInclude Include="..\AsmJit\CompilerX86X64.h" />
-    <ClInclude Include="..\AsmJit\Config.h" />
-    <ClInclude Include="..\AsmJit\CpuInfo.h" />
-    <ClInclude Include="..\AsmJit\Defs.h" />
-    <ClInclude Include="..\AsmJit\DefsX86X64.h" />
-    <ClInclude Include="..\AsmJit\Lock.h" />
-    <ClInclude Include="..\AsmJit\Logger.h" />
-    <ClInclude Include="..\AsmJit\LoggerX86X64.h" />
-    <ClInclude Include="..\AsmJit\MemoryManager.h" />
-    <ClInclude Include="..\AsmJit\Serializer.h" />
-    <ClInclude Include="..\AsmJit\SerializerX86X64.h" />
-    <ClInclude Include="..\AsmJit\Util.h" />
-    <ClInclude Include="..\AsmJit\VirtualMemory.h" />
-    <ClInclude Include="..\AsmJit\WarningsPop.h" />
-    <ClInclude Include="..\AsmJit\WarningsPush.h" />
     <ClInclude Include="..\atmsp\atmsp.h" />
-    <ClInclude Include="..\chaiscript\chaiscript.hpp" />
-    <ClInclude Include="..\chaiscript\chaiscript_defines.hpp" />
-    <ClInclude Include="..\chaiscript\chaiscript_stdlib.hpp" />
-    <ClInclude Include="..\chaiscript\chaiscript_threading.hpp" />
-    <ClInclude Include="..\chaiscript\dispatchkit\any.hpp" />
-    <ClInclude Include="..\chaiscript\dispatchkit\bad_boxed_cast.hpp" />
-    <ClInclude Include="..\chaiscript\dispatchkit\bind_first.hpp" />
-    <ClInclude Include="..\chaiscript\dispatchkit\bootstrap.hpp" />
-    <ClInclude Include="..\chaiscript\dispatchkit\bootstrap_stl.hpp" />
-    <ClInclude Include="..\chaiscript\dispatchkit\boxed_cast.hpp" />
-    <ClInclude Include="..\chaiscript\dispatchkit\boxed_cast_helper.hpp" />
-    <ClInclude Include="..\chaiscript\dispatchkit\boxed_number.hpp" />
-    <ClInclude Include="..\chaiscript\dispatchkit\boxed_value.hpp" />
-    <ClInclude Include="..\chaiscript\dispatchkit\dispatchkit.hpp" />
-    <ClInclude Include="..\chaiscript\dispatchkit\dynamic_cast_conversion.hpp" />
-    <ClInclude Include="..\chaiscript\dispatchkit\dynamic_object.hpp" />
-    <ClInclude Include="..\chaiscript\dispatchkit\exception_specification.hpp" />
-    <ClInclude Include="..\chaiscript\dispatchkit\function_call.hpp" />
-    <ClInclude Include="..\chaiscript\dispatchkit\function_call_detail.hpp" />
-    <ClInclude Include="..\chaiscript\dispatchkit\handle_return.hpp" />
-    <ClInclude Include="..\chaiscript\dispatchkit\operators.hpp" />
-    <ClInclude Include="..\chaiscript\dispatchkit\proxy_constructors.hpp" />
-    <ClInclude Include="..\chaiscript\dispatchkit\proxy_functions.hpp" />
-    <ClInclude Include="..\chaiscript\dispatchkit\proxy_functions_detail.hpp" />
-    <ClInclude Include="..\chaiscript\dispatchkit\register_function.hpp" />
-    <ClInclude Include="..\chaiscript\dispatchkit\type_info.hpp" />
-    <ClInclude Include="..\chaiscript\language\chaiscript_algebraic.hpp" />
-    <ClInclude Include="..\chaiscript\language\chaiscript_common.hpp" />
-    <ClInclude Include="..\chaiscript\language\chaiscript_engine.hpp" />
-    <ClInclude Include="..\chaiscript\language\chaiscript_eval.hpp" />
-    <ClInclude Include="..\chaiscript\language\chaiscript_parser.hpp" />
-    <ClInclude Include="..\chaiscript\language\chaiscript_prelude.hpp" />
-    <ClInclude Include="..\chaiscript\language\chaiscript_prelude_docs.hpp" />
-    <ClInclude Include="..\chaiscript\utility\utility.hpp" />
     <ClInclude Include="..\exprtk\exprtk.hpp" />
     <ClInclude Include="..\exprtk\exprtk_mpfr_adaptor.hpp" />
     <ClInclude Include="..\include\BenchATMSP.h" />
@@ -228,15 +175,6 @@
     <ClInclude Include="..\mpfr\include\mpir.h" />
     <ClInclude Include="..\mpfr\include\mpirxx.h" />
     <ClInclude Include="..\mpfr\include\mpreal.h" />
-    <ClInclude Include="..\MTParser\MTParserLib\MTParser.h" />
-    <ClInclude Include="..\MTParser\MTParserLib\MTParserCompiler.h" />
-    <ClInclude Include="..\MTParser\MTParserLib\MTParserDefFuncs.h" />
-    <ClInclude Include="..\MTParser\MTParserLib\MTParserDefOps.h" />
-    <ClInclude Include="..\MTParser\MTParserLib\MTParserExcepStrEng.h" />
-    <ClInclude Include="..\MTParser\MTParserLib\MTParserException.h" />
-    <ClInclude Include="..\MTParser\MTParserLib\MTParserRegistrar.h" />
-    <ClInclude Include="..\MTParser\MTParserLib\MTTools.h" />
-    <ClInclude Include="..\MTParser\MTParserLib\MTUnicodeANSIDefs.h" />
     <ClInclude Include="..\muparser2\muParser.h" />
     <ClInclude Include="..\muparser2\muParserBase.h" />
     <ClInclude Include="..\muparser2\muParserBytecode.h" />
@@ -298,18 +236,6 @@
     <ClInclude Include="..\tinyexpr\tinyexpr.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\AsmJit\AssemblerX86X64.cpp" />
-    <ClCompile Include="..\AsmJit\CompilerX86X64.cpp" />
-    <ClCompile Include="..\AsmJit\CpuInfo.cpp" />
-    <ClCompile Include="..\AsmJit\Defs.cpp" />
-    <ClCompile Include="..\AsmJit\Lock.cpp" />
-    <ClCompile Include="..\AsmJit\Logger.cpp" />
-    <ClCompile Include="..\AsmJit\LoggerX86X64.cpp" />
-    <ClCompile Include="..\AsmJit\LoggerX86X64Dump.cpp" />
-    <ClCompile Include="..\AsmJit\MemoryManager.cpp" />
-    <ClCompile Include="..\AsmJit\SerializerX86X64.cpp" />
-    <ClCompile Include="..\AsmJit\Util.cpp" />
-    <ClCompile Include="..\AsmJit\VirtualMemory.cpp" />
     <ClCompile Include="..\fparser\fparser.cc" />
     <ClCompile Include="..\lepton\CompiledExpression.cpp" />
     <ClCompile Include="..\lepton\ExpressionProgram.cpp" />
@@ -324,13 +250,6 @@
     <ClCompile Include="..\libcpuid\recog_amd.c" />
     <ClCompile Include="..\libcpuid\recog_intel.c" />
     <ClCompile Include="..\MathExpr\mathexpr.cpp" />
-    <ClCompile Include="..\MTParser\MTParserLib\MTParser.cpp" />
-    <ClCompile Include="..\MTParser\MTParserLib\MTParserCompiler.cpp" />
-    <ClCompile Include="..\MTParser\MTParserLib\MTParserExcepStrEng.cpp" />
-    <ClCompile Include="..\MTParser\MTParserLib\MTParserMacroFunc.cpp" />
-    <ClCompile Include="..\MTParser\MTParserLib\MTParserRegistrar.cpp" />
-    <ClCompile Include="..\MTParser\MTParserLib\MTTools.cpp" />
-    <ClCompile Include="..\MTParser\MTParserLib\MTUnicodeANSIDefs.cpp" />
     <ClCompile Include="..\muparser2\muParser.cpp" />
     <ClCompile Include="..\muparser2\muParserBase.cpp" />
     <ClCompile Include="..\muparser2\muParserBytecode.cpp" />
@@ -383,10 +302,8 @@
     <ClCompile Include="..\src\Benchmark.cpp" />
     <ClCompile Include="..\src\BenchMathExpr.cpp" />
     <ClCompile Include="..\src\BenchMETL.cpp" />
-    <ClCompile Include="..\src\BenchMTParser.cpp" />
     <ClCompile Include="..\src\BenchMuParser2.cpp" />
     <ClCompile Include="..\src\BenchMuParserX.cpp" />
-    <ClCompile Include="..\src\BenchNative.cpp" />
     <ClCompile Include="..\src\BenchTinyExpr.cpp" />
     <ClCompile Include="..\src\cpuid.cpp" />
     <ClCompile Include="..\src\FormelGenerator.cpp" />
@@ -395,7 +312,6 @@
     <ClCompile Include="..\tinyexpr\tinyexpr.c" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\chaiscript\language\chaiscript_prelude.chai" />
     <None Include="..\fparser\fparser.hh" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

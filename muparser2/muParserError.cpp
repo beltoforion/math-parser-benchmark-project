@@ -27,12 +27,11 @@
 
 namespace mu
 {
-  const ParserErrorMsg ParserErrorMsg::m_Instance;
-
   //------------------------------------------------------------------------------
   const ParserErrorMsg& ParserErrorMsg::Instance()
   {
-    return m_Instance;
+    static const ParserErrorMsg instance;
+    return instance;
   }
 
   //------------------------------------------------------------------------------
@@ -40,23 +39,6 @@ namespace mu
   {
     return (a_iIdx<m_vErrMsg.size()) ? m_vErrMsg[a_iIdx] : string_type();
   }
-
-  //---------------------------------------------------------------------------
-  ParserErrorMsg::~ParserErrorMsg()
-  {}
-
-  //---------------------------------------------------------------------------
-  /** \brief Assignement operator is deactivated.
-  */
-  ParserErrorMsg& ParserErrorMsg::operator=(const ParserErrorMsg& )
-  {
-    assert(false);
-    return *this;
-  }
-
-  //---------------------------------------------------------------------------
-  ParserErrorMsg::ParserErrorMsg(const ParserErrorMsg&)
-  {}
 
   //---------------------------------------------------------------------------
   ParserErrorMsg::ParserErrorMsg()
@@ -97,7 +79,7 @@ namespace mu
     m_vErrMsg[ecSTR_RESULT]             = _T("Function result is a string.");
     m_vErrMsg[ecGENERIC]                = _T("Parser error.");
     m_vErrMsg[ecLOCALE]                 = _T("Decimal separator is identic to function argument separator.");
-    m_vErrMsg[ecUNEXPECTED_CONDITIONAL] = _T("The \"$TOK$\" operator must be preceeded by a closing bracket.");
+    m_vErrMsg[ecUNEXPECTED_CONDITIONAL] = _T("The \"$TOK$\" operator must be preceded by a closing bracket.");
     m_vErrMsg[ecMISSING_ELSE_CLAUSE]    = _T("If-then-else operator is missing an else clause");
     m_vErrMsg[ecMISPLACED_COLON]        = _T("Misplaced colon at position $POS$");
     m_vErrMsg[ecUNREASONABLE_NUMBER_OF_COMPUTATIONS] = _T("Number of computations to small for bulk mode. (Vectorisation overhead too costly)");

@@ -6,16 +6,16 @@
 
 #include "Benchmark.h"
 
-//-------------------------------------------------------------------------------------------------
+
 class BenchNative : public Benchmark
 {
 public:
 
-   BenchNative();
+	BenchNative();
 
-   double DoBenchmark(const std::string& sExpr, long iCount);
+	double DoBenchmark(const std::string& sExpr, long iCount);
 
-   static std::vector<std::string> load_native_expressions();
+	static std::vector<std::string> load_native_expressions();
 };
 
 #endif

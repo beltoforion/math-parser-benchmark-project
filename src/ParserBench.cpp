@@ -8,17 +8,15 @@
 #include <iostream>
 #include <map>
 #include <memory>
+#include <filesystem>
 
 #ifdef _MSC_VER
-#ifndef NOMINMAX
-#define NOMINMAX
-#endif
-#ifndef WIN32_LEAN_AND_MEAN
-#define WIN32_LEAN_AND_MEAN
-#endif
-#include <windows.h>
+	#ifndef WIN32_LEAN_AND_MEAN
+		#define WIN32_LEAN_AND_MEAN
+	#endif
+	#include <windows.h>
 #else
-#include <pthread.h>
+	#include <pthread.h>
 #endif
 
 #include "FormelGenerator.h"
@@ -39,9 +37,6 @@
 #include "BenchExprTkMPFR.h"
 #endif
 
-#if defined(_MSC_VER) && defined(NDEBUG)
-#include "BenchMTParser.h"
-#endif
 
 std::vector<std::string> load_expressions(const std::string& file_name)
 {
@@ -49,6 +44,7 @@ std::vector<std::string> load_expressions(const std::string& file_name)
 
 	std::ifstream stream(file_name.c_str());
 
+	std::cout << "Current path is " << std::filesystem::current_path() << std::endl;
 	if (stream)
 	{
 		std::string buffer;
@@ -299,7 +295,10 @@ void Shootout(const std::string& sCaption,
 	output(pRes, "  - Compiled with GCC Version %d.%d.%d\n", __GNUC__, __GNUC_MINOR__, __GNUC_PATCHLEVEL__);
 #elif defined(_MSC_VER)
 	output(pRes, "  - Compiled with MSVC Version %d\n", _MSC_VER);
+#elif defined(__clang__)
+	output(pRes, "  - Compiled with CLANG Version %d.%d.%d\n", __clang_major__, __clang_minor__, __clang_patchlevel__);
 #endif
+
 
 	output(pRes, "  - IEEE 754 (IEC 559) is %s\n", (std::numeric_limits<double>::is_iec559) ? "Available" : " NOT AVAILABLE");
 	output(pRes, "  - %d-bit build\n", sizeof(void*) * 8);
@@ -387,7 +386,6 @@ int main(int argc, const char* argv[])
 	int iCount = 10000000;
 
 	bool writeResultTable = false;
-	bool nativeBenchmark = false;
 
 	const std::string benchmark_file_set[] =
 	{
@@ -418,10 +416,7 @@ int main(int argc, const char* argv[])
 
 	if (argc >= 3)
 	{
-		if (std::string(argv[2]) == "native")
-			nativeBenchmark = true;
-		else
-			benchmark_file = argv[2];
+		benchmark_file = argv[2];
 	}
 
 	if ((argc >= 4) && (std::string(argv[3]) == "write_table"))
@@ -431,17 +426,11 @@ int main(int argc, const char* argv[])
 
 	std::vector<std::string> vExpr;
 
-	if (nativeBenchmark)
-	{
-		benchmark_file = "Set of expressions for Native mode";
-		vExpr = BenchNative::load_native_expressions();
-	}
-	else
-		vExpr = load_expressions(benchmark_file);
-
+	vExpr = load_expressions(benchmark_file);
 	if (vExpr.empty())
 	{
-		std::cout << "ERROR - Failed to load any expressions!\n";
+		std::cout << "ERROR - Failed to load any expressions!" << std::endl;
+		std::cout << "Current path is " << std::filesystem::current_path() << std::endl;
 		return 1;
 	}
 
@@ -463,10 +452,6 @@ int main(int argc, const char* argv[])
 	benchmarks.push_back(std::make_shared<BenchMathExpr >());
 	benchmarks.push_back(std::make_shared<BenchTinyExpr >());
 
-#if defined(_MSC_VER) && defined(NDEBUG)
-	benchmarks.push_back(std::make_shared<BenchMTParser >()); // <-- Crash in debug mode
-#endif
-
 #ifdef ENABLE_MPFR
 	benchmarks.push_back(std::make_shared<BenchExprTkMPFR>());
 #endif
@@ -474,9 +459,6 @@ int main(int argc, const char* argv[])
 #ifdef ENABLE_METL
 	benchmarks.push_back(std::make_shared<BenchMETL>());
 #endif
-
-	if (nativeBenchmark)
-		benchmarks.push_back(std::make_shared<BenchNative>());
 
 	Shootout(benchmark_file, benchmarks, vExpr, iCount, writeResultTable);
 

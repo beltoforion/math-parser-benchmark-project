@@ -6,7 +6,6 @@
 
 #include "Benchmark.h"
 
-//-------------------------------------------------------------------------------------------------
 class BenchExprTk : public Benchmark
 {
 public:

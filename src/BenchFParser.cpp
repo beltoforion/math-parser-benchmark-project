@@ -1,107 +1,104 @@
 #include "BenchFParser.h"
-
 #include <cmath>
-
-// fparser includes
 #include "fparser/fparser.hh"
 
-//-------------------------------------------------------------------------------------------------
+
 BenchFParser::BenchFParser()
-: Benchmark()
+	: Benchmark()
 {
-   m_sName = "FParser 4.5";
+	m_sName = "FParser 4.5";
 }
 
-//-------------------------------------------------------------------------------------------------
+
 double BenchFParser::DoBenchmark(const std::string& sExpr, long iCount)
 {
-   double fRes = 0.0;
-   double fSum = 0.0;
+	double fRes = 0.0;
+	double fSum = 0.0;
 
-   FunctionParser Parser;
-   Parser.AddConstant("pi", (double)M_PI);
-   Parser.AddConstant("e",  (double)M_E );
+	FunctionParser Parser;
+	Parser.AddConstant("pi", (double)M_PI);
+	Parser.AddConstant("e", (double)M_E);
 
-   if (Parser.Parse(sExpr.c_str(), "a,b,c,x,y,z,w") >= 0)
-   {
-      StopTimerAndReport(Parser.ErrorMsg());
-      return m_fTime1;
-   }
-   else
-   {
-      double vals[] = {
-                        1.1,
-                        2.2,
-                        3.3,
-                        2.123456,
-                        3.123456,
-                        4.123456,
-                        5.123456
-                      };
+	if (Parser.Parse(sExpr.c_str(), "a,b,c,x,y,z,w") >= 0)
+	{
+		StopTimerAndReport(Parser.ErrorMsg());
+		return m_fTime1;
+	}
+	else
+	{
+		double vals[] = {
+						  1.1,
+						  2.2,
+						  3.3,
+						  2.123456,
+						  3.123456,
+						  4.123456,
+						  5.123456
+		};
 
-      // Perform basic tests for the variables used
-      // in the expressions
-      {
-         bool test_result = true;
+		// Perform basic tests for the variables used
+		// in the expressions
+		{
+			bool test_result = true;
 
-         auto tests_list = test_expressions();
+			auto tests_list = test_expressions();
 
-         for (auto test : tests_list)
-         {
-            FunctionParser TestParser;
+			for (auto test : tests_list)
+			{
+				FunctionParser TestParser;
 
-            if (
-                 (TestParser.Parse(test.first.c_str(), "a,b,c,x,y,z,w") >= 0) ||
-                 (!is_equal(test.second,TestParser.Eval(vals)))
-               )
-            {
-               test_result = false;
-               break;
-            }
-         }
+				if (
+					(TestParser.Parse(test.first.c_str(), "a,b,c,x,y,z,w") >= 0) ||
+					(!is_equal(test.second, TestParser.Eval(vals)))
+					)
+				{
+					test_result = false;
+					break;
+				}
+			}
 
-         if (!test_result)
-         {
-            StopTimerAndReport("Failed variable test");
-            return m_fTime1;
-         }
-      }
+			if (!test_result)
+			{
+				StopTimerAndReport("Failed variable test");
+				return m_fTime1;
+			}
+		}
 
-      //Prime the I and D caches for the expression
-      {
-         double d0 = 0.0;
-         double d1 = 0.0;
+		//Prime the I and D caches for the expression
+		{
+			double d0 = 0.0;
+			double d1 = 0.0;
 
-         for (std::size_t i = 0; i < priming_rounds; ++i)
-         {
-            if (i & 1)
-               d0 += Parser.Eval(vals);
-            else
-               d1 += Parser.Eval(vals);
-         }
+			for (std::size_t i = 0; i < priming_rounds; ++i)
+			{
+				if (i & 1)
+					d0 += Parser.Eval(vals);
+				else
+					d1 += Parser.Eval(vals);
+			}
 
-         if (
-               (d0 == std::numeric_limits<double>::infinity()) &&
-               (d1 == std::numeric_limits<double>::infinity())
-            )
-         {
-            printf("\n");
-         }
-      }
+			if (
+				(d0 == std::numeric_limits<double>::infinity()) &&
+				(d1 == std::numeric_limits<double>::infinity())
+				)
+			{
+				printf("\n");
+			}
+		}
 
-      fRes = Parser.Eval(vals);
+		fRes = Parser.Eval(vals);
 
-      StartTimer();
+		StartTimer();
 
-      for (int j = 0; j < iCount; ++j)
-      {
-         fSum += Parser.Eval(vals);
-         std::swap(vals[0], vals[1]);
-         std::swap(vals[3], vals[4]);
-      }
+		for (int j = 0; j < iCount; ++j)
+		{
+			fSum += Parser.Eval(vals);
+			std::swap(vals[0], vals[1]);
+			std::swap(vals[3], vals[4]);
+		}
 
-      StopTimer(fRes, fSum, iCount);
-   }
+		StopTimer(fRes, fSum, iCount);
+	}
 
-   return m_fTime1;
+	return m_fTime1;
 }
