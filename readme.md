@@ -1,4 +1,4 @@
-# C++ Math Expression Parser Benchmark Project
+# C++ Math Parser Benchmark Project
 
 This is a benchmark suite for different implementations of open source math
 expression parsers and evaluators written in C++. Currently the following
@@ -13,15 +13,14 @@ expression parsers are part of this benchmark:
 | 04  | [MathExpr](http://www.yann-ollivier.org/mathlib/mathexpr) | Yann Ollivier                 | [Copyright Notice 1997-2000](http://www.yann-ollivier.org/mathlib/mathexpr#C)     | double |
 | 05  | [METL](https://github.com/TillHeinzel/METL)               | Till Heinzel                  | [Apache](https://opensource.org/licenses/Apache-2.0)      | double                |
 | 06  | [MTParser](http://www.codeproject.com/Articles/7335/An-extensible-math-expression-parser-with-plug-ins)| Mathieu Jacques | [CPOL](http://www.codeproject.com/info/cpol10.aspx)| double |
-| 07  | [muParser](http://muparser.beltoforion.de)                | Ingo Berg                     | [MIT](http://www.opensource.org/licenses/mit-license.php) | double, float         |
-| 08  | [muParserX](http://muparserx.beltoforion.de)              | Ingo Berg                     | [MIT](http://www.opensource.org/licenses/mit-license.php) | double, float         |
+| 07  | [muParser](http://muparser.beltoforion.de)                | Ingo Berg                     | [BSD](https://en.wikipedia.org/wiki/BSD_licenses) | double, float, int         |
+| 08  | [muParserX](http://muparserx.beltoforion.de)              | Ingo Berg                     | [BSD](https://en.wikipedia.org/wiki/BSD_licenses) | double, float, matrix, string         |
 | 09  | [TinyExpr](https://github.com/codeplea/tinyexpr)          | Lewis Van Winkle              | [Zlib](https://opensource.org/licenses/Zlib)              | double                |
 
 
-**Note:** The terms double, float etc found in the table above are defined as follows:
+**Note:** The terms double, mpfr etc found in the table above are defined as follows:
 
 * double : [IEEE-754 Double-Precision Binary Floating-Point (64-bit)](https://en.wikipedia.org/wiki/Double-precision_floating-point_format)
-* float  : [IEEE-754 Single-precision floating-point format (32-bit)](https://en.wikipedia.org/wiki/Single-precision_floating-point_format)
 * MPFR   : [GNU Multiple Precision Floating-Point Reliably](https://en.wikipedia.org/wiki/GNU_MPFR)
 
 
@@ -50,17 +49,17 @@ The benchmark takes two parameters:
 
 The mathematical expression benchmark files are as follows:
 
-1.  [bench_expr.txt](https://github.com/ArashPartow/math-parser-benchmark-project/blob/master/bench_expr.txt)
-1.  [bench_expr_all.txt](https://github.com/ArashPartow/math-parser-benchmark-project/blob/master/bench_expr_all.txt)
-1.  [bench_expr_all_permutations.txt](https://github.com/ArashPartow/math-parser-benchmark-project/blob/master/bench_expr_all_permutations.txt)
-1.  [bench_expr_complete.txt](https://github.com/ArashPartow/math-parser-benchmark-project/blob/master/bench_expr_complete.txt)
-1.  [bench_expr_extensive.txt](https://github.com/ArashPartow/math-parser-benchmark-project/blob/master/bench_expr_extensive.txt)
-1.  [bench_expr_precedence.txt](https://github.com/ArashPartow/math-parser-benchmark-project/blob/master/bench_expr_precedence.txt)
-1.  [bench_expr_random_with_functions.txt](https://github.com/ArashPartow/math-parser-benchmark-project/blob/master/bench_expr_random_with_functions.txt)
-1.  [bench_expr_random_without_functions.txt](https://github.com/ArashPartow/math-parser-benchmark-project/blob/master/bench_expr_random_without_functions.txt)
-1.  [bench_expr_weird.txt](https://github.com/ArashPartow/math-parser-benchmark-project/blob/master/bench_expr_weird.txt)
+1.  [bench_expr.txt](https://github.com/beltoforion/math-parser-benchmark-project/blob/master/bench_expr.txt)
+1.  [bench_expr_all.txt](https://github.com/beltoforion/math-parser-benchmark-project/blob/master/bench_expr_all.txt)
+1.  [bench_expr_all_permutations.txt](https://github.com/beltoforion/math-parser-benchmark-project/blob/master/bench_expr_all_permutations.txt)
+1.  [bench_expr_complete.txt](https://github.com/beltoforion/math-parser-benchmark-project/blob/master/bench_expr_complete.txt)
+1.  [bench_expr_extensive.txt](https://github.com/beltoforion/math-parser-benchmark-project/blob/master/bench_expr_extensive.txt)
+1.  [bench_expr_precedence.txt](https://github.com/beltoforion/math-parser-benchmark-project/blob/master/bench_expr_precedence.txt)
+1.  [bench_expr_random_with_functions.txt](https://github.com/beltoforion/math-parser-benchmark-project/blob/master/bench_expr_random_with_functions.txt)
+1.  [bench_expr_random_without_functions.txt](https://github.com/beltoforion/math-parser-benchmark-project/blob/master/bench_expr_random_without_functions.txt)
+1.  [bench_expr_weird.txt](https://github.com/beltoforion/math-parser-benchmark-project/blob/master/bench_expr_weird.txt)
 
-The following is a short sampling of expressions taken from the [*bench_expr.txt*](https://github.com/ArashPartow/math-parser-benchmark-project/blob/master/bench_expr.txt)
+The following is a short sampling of expressions taken from the [*bench_expr.txt*](https://github.com/beltoforion/math-parser-benchmark-project/blob/master/bench_expr.txt)
 expression suite:
 
 *   a+1.1
@@ -79,7 +78,7 @@ expression suite:
 *   a-(e^(log(7+b)))
 
 
-As an example, the following execution will use the[*"bench_expr_all.txt"*](https://github.com/ArashPartow/math-parser-benchmark-project/blob/master/bench_expr_all.txt)
+As an example, the following execution will use the[*"bench_expr_all.txt"*](https://github.com/beltoforion/math-parser-benchmark-project/blob/master/bench_expr_all.txt)
 set of expressions, executing each expression 100000 times:
 
     ParserBench.exe 100000 bench_expr_all.txt
@@ -197,9 +196,7 @@ The following is an example summary generated at the completion of the benchmark
       11    Lepton                  double          134        8     2
       12    muparserx               double           86        5     0
 
-## The Results
-The summaries of runs of the benchmark suite upon various architectures can be found here: [Results](https://github.com/ArashPartow/math-parser-benchmark-project/tree/master/logs)
-
+<!-- currenlty not available
 ## Example Results
 The following is a chart depicting the results as executions per
 second obtained by running the
@@ -209,11 +206,6 @@ an Intel Xeon E5-2687W 3GHz. The horizontal measure on the chart is
 the length of the expression in bytes.
 
 ![ScreenShot](http://www.partow.net/experimental/images/benchmark_result.png?raw=true "C++ Mathematical Expression Parser Benchmark Results")
-
-**Note:** The parsers *muParserSSE* and *ExprTKFloat* were excluded
-due to their use of the float type, and the *Lepton* and *muParserX*
-parsers were excluded due to the fact that their results were
-consistently 2-3 orders of magnitude slower than all the others.
 
 **Note:** The command executed to generate the above results is as follows:
 
@@ -268,3 +260,4 @@ The addition of new or unlisted C++ mathematical expression parsers is always we
 If you know of a parser and would like it included in the suite feel free to make a
 request. Additionally if the associated benchmark implementation *(eg: src/BenchXYZW.cpp)*
 could be made available as part of the request that would very helpful.
+-->
