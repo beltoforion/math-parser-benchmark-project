@@ -1,3 +1,0 @@
-Benchmark (Shootout for file "bench_expr_all.txt")
-
-Expression 1 of 210: "1"; Progress: 
