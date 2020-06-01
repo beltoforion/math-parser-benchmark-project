@@ -196,9 +196,7 @@ The following is an example summary generated at the completion of the benchmark
       11    Lepton                  double          134        8     2
       12    muparserx               double           86        5     0
 
-## The Results
-The summaries of runs of the benchmark suite upon various architectures can be found here: [Results](https://github.com/ArashPartow/math-parser-benchmark-project/tree/master/logs)
-
+<!-- currenlty not available
 ## Example Results
 The following is a chart depicting the results as executions per
 second obtained by running the
@@ -208,11 +206,6 @@ an Intel Xeon E5-2687W 3GHz. The horizontal measure on the chart is
 the length of the expression in bytes.
 
 ![ScreenShot](http://www.partow.net/experimental/images/benchmark_result.png?raw=true "C++ Mathematical Expression Parser Benchmark Results")
-
-**Note:** The parsers *muParserSSE* and *ExprTKFloat* were excluded
-due to their use of the float type, and the *Lepton* and *muParserX*
-parsers were excluded due to the fact that their results were
-consistently 2-3 orders of magnitude slower than all the others.
 
 **Note:** The command executed to generate the above results is as follows:
 
@@ -267,3 +260,4 @@ The addition of new or unlisted C++ mathematical expression parsers is always we
 If you know of a parser and would like it included in the suite feel free to make a
 request. Additionally if the associated benchmark implementation *(eg: src/BenchXYZW.cpp)*
 could be made available as part of the request that would very helpful.
+-->
