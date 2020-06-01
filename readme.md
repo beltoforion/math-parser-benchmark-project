@@ -18,7 +18,7 @@ expression parsers are part of this benchmark:
 | 09  | [TinyExpr](https://github.com/codeplea/tinyexpr)          | Lewis Van Winkle              | [Zlib](https://opensource.org/licenses/Zlib)              | double                |
 
 
-**Note:** The terms double, float etc found in the table above are defined as follows:
+**Note:** The terms double, mpfr etc found in the table above are defined as follows:
 
 * double : [IEEE-754 Double-Precision Binary Floating-Point (64-bit)](https://en.wikipedia.org/wiki/Double-precision_floating-point_format)
 * MPFR   : [GNU Multiple Precision Floating-Point Reliably](https://en.wikipedia.org/wiki/GNU_MPFR)
