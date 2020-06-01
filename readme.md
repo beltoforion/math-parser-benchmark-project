@@ -21,7 +21,6 @@ expression parsers are part of this benchmark:
 **Note:** The terms double, float etc found in the table above are defined as follows:
 
 * double : [IEEE-754 Double-Precision Binary Floating-Point (64-bit)](https://en.wikipedia.org/wiki/Double-precision_floating-point_format)
-* float  : [IEEE-754 Single-precision floating-point format (32-bit)](https://en.wikipedia.org/wiki/Single-precision_floating-point_format)
 * MPFR   : [GNU Multiple Precision Floating-Point Reliably](https://en.wikipedia.org/wiki/GNU_MPFR)
 
 
