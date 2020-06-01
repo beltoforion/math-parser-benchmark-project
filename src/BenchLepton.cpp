@@ -2,7 +2,6 @@
 
 #include <string>
 #include <map>
-
 #include <cmath>
 
 #define LEPTON_BUILDING_STATIC_LIBRARY
