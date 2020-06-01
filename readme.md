@@ -1,4 +1,4 @@
-# C++ Math Expression Parser Benchmark Project
+# C++ Math Parser Benchmark Project
 
 This is a benchmark suite for different implementations of open source math
 expression parsers and evaluators written in C++. Currently the following
