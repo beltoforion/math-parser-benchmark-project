@@ -28,7 +28,6 @@
 #include "BenchMuParser2.h"
 #include "BenchATMSP.h"
 #include "BenchExprTk.h"
-#include "BenchExprTkFloat.h"
 #include "BenchLepton.h"
 #include "BenchFParser.h"
 #include "BenchMathExpr.h"
@@ -43,11 +42,6 @@
 #if defined(_MSC_VER) && defined(NDEBUG)
 #include "BenchMTParser.h"
 #endif
-
-#ifdef _MSC_VER
-#include "BenchMuParserSSE.h"
-#endif
-
 
 std::vector<std::string> load_expressions(const std::string& file_name)
 {
@@ -472,11 +466,6 @@ int main(int argc, const char* argv[])
 #if defined(_MSC_VER) && defined(NDEBUG)
 	benchmarks.push_back(std::make_shared<BenchMTParser >()); // <-- Crash in debug mode
 #endif
-
-#ifdef _MSC_VER
-	benchmarks.push_back(std::make_shared<BenchMuParserSSE>());
-#endif
-	benchmarks.push_back(std::make_shared<BenchExprTkFloat>());
 
 #ifdef ENABLE_MPFR
 	benchmarks.push_back(std::make_shared<BenchExprTkMPFR>());

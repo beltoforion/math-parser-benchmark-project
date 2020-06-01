@@ -178,7 +178,6 @@
     <ClCompile Include="..\src\BenchATMSP.cpp" />
     <ClCompile Include="..\src\BenchChaiScript.cpp" />
     <ClCompile Include="..\src\BenchExprTk.cpp" />
-    <ClCompile Include="..\src\BenchExprTkFloat.cpp" />
     <ClCompile Include="..\src\BenchExprTkMPFR.cpp" />
     <ClCompile Include="..\src\BenchFParser.cpp" />
     <ClCompile Include="..\src\BenchLepton.cpp" />
@@ -186,7 +185,6 @@
     <ClCompile Include="..\src\BenchMathExpr.cpp" />
     <ClCompile Include="..\src\BenchMTParser.cpp" />
     <ClCompile Include="..\src\BenchMuParser2.cpp" />
-    <ClCompile Include="..\src\BenchMuParserSSE.cpp" />
     <ClCompile Include="..\src\BenchMuParserX.cpp" />
     <ClCompile Include="..\src\FormelGenerator.cpp" />
     <ClCompile Include="..\src\ParserBench.cpp" />
@@ -213,33 +211,6 @@
       <Filter>lepton</Filter>
     </ClCompile>
     <ClCompile Include="..\src\BenchNative.cpp" />
-    <ClCompile Include="..\muParserSSE\mecCallback.cpp">
-      <Filter>muparsersse</Filter>
-    </ClCompile>
-    <ClCompile Include="..\muParserSSE\mecError.cpp">
-      <Filter>muparsersse</Filter>
-    </ClCompile>
-    <ClCompile Include="..\muParserSSE\mecExprCompiler.cpp">
-      <Filter>muparsersse</Filter>
-    </ClCompile>
-    <ClCompile Include="..\muParserSSE\mecParser.cpp">
-      <Filter>muparsersse</Filter>
-    </ClCompile>
-    <ClCompile Include="..\muParserSSE\mecParserBase.cpp">
-      <Filter>muparsersse</Filter>
-    </ClCompile>
-    <ClCompile Include="..\muParserSSE\mecReversePolishNotation.cpp">
-      <Filter>muparsersse</Filter>
-    </ClCompile>
-    <ClCompile Include="..\muParserSSE\mecToken.cpp">
-      <Filter>muparsersse</Filter>
-    </ClCompile>
-    <ClCompile Include="..\muParserSSE\mecTokenReader.cpp">
-      <Filter>muparsersse</Filter>
-    </ClCompile>
-    <ClCompile Include="..\muParserSSE\mecUnitTest.cpp">
-      <Filter>muparsersse</Filter>
-    </ClCompile>
     <ClCompile Include="..\AsmJit\AssemblerX86X64.cpp">
       <Filter>asmjit</Filter>
     </ClCompile>
@@ -280,9 +251,6 @@
       <Filter>tinyexpr</Filter>
     </ClCompile>
     <ClCompile Include="..\src\BenchTinyExpr.cpp" />
-    <ClCompile Include="..\muParserSSE\muParserSSE.cpp">
-      <Filter>muparsersse</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\BenchMETL.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -595,9 +563,6 @@
     <ClInclude Include="..\chaiscript\dispatchkit\dispatchkit.hpp">
       <Filter>chaiscript</Filter>
     </ClInclude>
-    <ClInclude Include="..\muParserSSE\muParserSSE.h">
-      <Filter>muparsersse</Filter>
-    </ClInclude>
     <ClInclude Include="..\chaiscript\dispatchkit\register_function.hpp">
       <Filter>chaiscript</Filter>
     </ClInclude>
@@ -729,39 +694,6 @@
     </ClInclude>
     <ClInclude Include="..\include\BenchNative.h">
       <Filter>headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\muParserSSE\mecCallback.h">
-      <Filter>muparsersse</Filter>
-    </ClInclude>
-    <ClInclude Include="..\muParserSSE\mecDef.h">
-      <Filter>muparsersse</Filter>
-    </ClInclude>
-    <ClInclude Include="..\muParserSSE\mecError.h">
-      <Filter>muparsersse</Filter>
-    </ClInclude>
-    <ClInclude Include="..\muParserSSE\mecExprCompiler.h">
-      <Filter>muparsersse</Filter>
-    </ClInclude>
-    <ClInclude Include="..\muParserSSE\mecParser.h">
-      <Filter>muparsersse</Filter>
-    </ClInclude>
-    <ClInclude Include="..\muParserSSE\mecParserBase.h">
-      <Filter>muparsersse</Filter>
-    </ClInclude>
-    <ClInclude Include="..\muParserSSE\mecReversePolishNotation.h">
-      <Filter>muparsersse</Filter>
-    </ClInclude>
-    <ClInclude Include="..\muParserSSE\mecStack.h">
-      <Filter>muparsersse</Filter>
-    </ClInclude>
-    <ClInclude Include="..\muParserSSE\mecToken.h">
-      <Filter>muparsersse</Filter>
-    </ClInclude>
-    <ClInclude Include="..\muParserSSE\mecTokenReader.h">
-      <Filter>muparsersse</Filter>
-    </ClInclude>
-    <ClInclude Include="..\muParserSSE\mecUnitTest.h">
-      <Filter>muparsersse</Filter>
     </ClInclude>
     <ClInclude Include="..\AsmJit\AsmJit.h">
       <Filter>asmjit</Filter>
@@ -928,9 +860,6 @@
     </Filter>
     <Filter Include="mtparser">
       <UniqueIdentifier>{954d0675-ef4b-4ec2-a70c-eafd3cf51e3a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="muparsersse">
-      <UniqueIdentifier>{62022d91-0758-4c48-9ec1-357588124a4c}</UniqueIdentifier>
     </Filter>
     <Filter Include="muparserx">
       <UniqueIdentifier>{f7e6e6a7-b0d3-42e4-9929-52187ce2ce0d}</UniqueIdentifier>
