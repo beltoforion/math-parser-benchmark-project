@@ -155,11 +155,9 @@
       <Filter>libcpuid</Filter>
     </ClCompile>
     <ClCompile Include=".\src\BenchATMSP.cpp" />
-    <ClCompile Include=".\src\BenchChaiScript.cpp" />
     <ClCompile Include=".\src\BenchExprTk.cpp" />
     <ClCompile Include=".\src\BenchExprTkMPFR.cpp" />
     <ClCompile Include=".\src\BenchFParser.cpp" />
-    <ClCompile Include=".\src\BenchLepton.cpp" />
     <ClCompile Include=".\src\Benchmark.cpp" />
     <ClCompile Include=".\src\BenchMathExpr.cpp" />
     <ClCompile Include=".\src\BenchMuParser2.cpp" />
@@ -170,29 +168,12 @@
     <ClCompile Include=".\src\cpuid.cpp">
       <Filter>libcpuid</Filter>
     </ClCompile>
-    <ClCompile Include=".\lepton\CompiledExpression.cpp">
-      <Filter>lepton</Filter>
-    </ClCompile>
-    <ClCompile Include=".\lepton\ExpressionProgram.cpp">
-      <Filter>lepton</Filter>
-    </ClCompile>
-    <ClCompile Include=".\lepton\ExpressionTreeNode.cpp">
-      <Filter>lepton</Filter>
-    </ClCompile>
-    <ClCompile Include=".\lepton\Operation.cpp">
-      <Filter>lepton</Filter>
-    </ClCompile>
-    <ClCompile Include=".\lepton\ParsedExpression.cpp">
-      <Filter>lepton</Filter>
-    </ClCompile>
-    <ClCompile Include=".\lepton\Parser.cpp">
-      <Filter>lepton</Filter>
-    </ClCompile>
     <ClCompile Include=".\tinyexpr\tinyexpr.c">
       <Filter>tinyexpr</Filter>
     </ClCompile>
     <ClCompile Include=".\src\BenchTinyExpr.cpp" />
     <ClCompile Include=".\src\BenchMETL.cpp" />
+    <ClCompile Include="BenchMuParser3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include=".\exprtk\exprtk.hpp">
@@ -426,22 +407,13 @@
     <ClInclude Include=".\include\BenchATMSP.h">
       <Filter>headers</Filter>
     </ClInclude>
-    <ClInclude Include=".\include\BenchChaiScript.h">
-      <Filter>headers</Filter>
-    </ClInclude>
     <ClInclude Include=".\include\BenchExprTk.h">
-      <Filter>headers</Filter>
-    </ClInclude>
-    <ClInclude Include=".\include\BenchExprTkFloat.h">
       <Filter>headers</Filter>
     </ClInclude>
     <ClInclude Include=".\include\BenchExprTkMPFR.h">
       <Filter>headers</Filter>
     </ClInclude>
     <ClInclude Include=".\include\BenchFParser.h">
-      <Filter>headers</Filter>
-    </ClInclude>
-    <ClInclude Include=".\include\BenchLepton.h">
       <Filter>headers</Filter>
     </ClInclude>
     <ClInclude Include=".\include\Benchmark.h">
@@ -470,42 +442,6 @@
     </ClInclude>
     <ClInclude Include=".\include\cpuid.h">
       <Filter>libcpuid</Filter>
-    </ClInclude>
-    <ClInclude Include=".\lepton\ExpressionProgram.h">
-      <Filter>lepton</Filter>
-    </ClInclude>
-    <ClInclude Include=".\lepton\ExpressionTreeNode.h">
-      <Filter>lepton</Filter>
-    </ClInclude>
-    <ClInclude Include=".\lepton\Lepton.h">
-      <Filter>lepton</Filter>
-    </ClInclude>
-    <ClInclude Include=".\lepton\MSVC_erfc.h">
-      <Filter>lepton</Filter>
-    </ClInclude>
-    <ClInclude Include=".\lepton\Parser.h">
-      <Filter>lepton</Filter>
-    </ClInclude>
-    <ClInclude Include=".\lepton\windowsIncludes.h">
-      <Filter>lepton</Filter>
-    </ClInclude>
-    <ClInclude Include=".\lepton\lepton\CompiledExpression.h">
-      <Filter>lepton</Filter>
-    </ClInclude>
-    <ClInclude Include=".\lepton\lepton\CustomFunction.h">
-      <Filter>lepton</Filter>
-    </ClInclude>
-    <ClInclude Include=".\lepton\lepton\Exception.h">
-      <Filter>lepton</Filter>
-    </ClInclude>
-    <ClInclude Include=".\lepton\lepton\Operation.h">
-      <Filter>lepton</Filter>
-    </ClInclude>
-    <ClInclude Include=".\lepton\lepton\ParsedExpression.h">
-      <Filter>lepton</Filter>
-    </ClInclude>
-    <ClInclude Include=".\include\BenchNative.h">
-      <Filter>headers</Filter>
     </ClInclude>
     <ClInclude Include=".\tinyexpr\tinyexpr.h">
       <Filter>tinyexpr</Filter>
@@ -579,6 +515,42 @@
     <ClInclude Include=".\include\BenchMETL.h">
       <Filter>headers</Filter>
     </ClInclude>
+    <ClInclude Include="muparser3\muParser.h">
+      <Filter>muparser3</Filter>
+    </ClInclude>
+    <ClInclude Include="muparser3\muParserBase.h">
+      <Filter>muparser3</Filter>
+    </ClInclude>
+    <ClInclude Include="muparser3\muParserBytecode.h">
+      <Filter>muparser3</Filter>
+    </ClInclude>
+    <ClInclude Include="muparser3\muParserDef.h">
+      <Filter>muparser3</Filter>
+    </ClInclude>
+    <ClInclude Include="muparser3\muParserError.h">
+      <Filter>muparser3</Filter>
+    </ClInclude>
+    <ClInclude Include="muparser3\muParserMath.h">
+      <Filter>muparser3</Filter>
+    </ClInclude>
+    <ClInclude Include="muparser3\muParserStack.h">
+      <Filter>muparser3</Filter>
+    </ClInclude>
+    <ClInclude Include="muparser3\muParserTest.h">
+      <Filter>muparser3</Filter>
+    </ClInclude>
+    <ClInclude Include="muparser3\muParserToken.h">
+      <Filter>muparser3</Filter>
+    </ClInclude>
+    <ClInclude Include="muparser3\muParserTokenReader.h">
+      <Filter>muparser3</Filter>
+    </ClInclude>
+    <ClInclude Include="muparser3\muPrecompiledEngines.h">
+      <Filter>muparser3</Filter>
+    </ClInclude>
+    <ClInclude Include="BenchMuParser3.h">
+      <Filter>headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\fparser\fparser.hh" />
@@ -592,9 +564,6 @@
     </Filter>
     <Filter Include="atmsp">
       <UniqueIdentifier>{e5240e10-86f9-4344-9abf-f7916671604a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="lepton">
-      <UniqueIdentifier>{43d309e3-106f-4c92-998f-46007b9b7140}</UniqueIdentifier>
     </Filter>
     <Filter Include="headers">
       <UniqueIdentifier>{cce58da5-5a3c-467a-91be-14e814fc8310}</UniqueIdentifier>
@@ -619,6 +588,9 @@
     </Filter>
     <Filter Include="metl">
       <UniqueIdentifier>{121d274d-9553-487e-9d0e-5d05f26a7453}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="muparser3">
+      <UniqueIdentifier>{073ec0a1-8a2f-4e7b-8c27-50a5c56ff04a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

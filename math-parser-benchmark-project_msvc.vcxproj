@@ -63,6 +63,8 @@
       <MinimalRebuild>false</MinimalRebuild>
       <AdditionalIncludeDirectories>.\;.\include;.\mpfr;.\metl;</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -88,12 +90,14 @@
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <FloatingPointModel>Fast</FloatingPointModel>
-      <AdditionalIncludeDirectories>.\;.\include;.\mpfr;.\metl;.\AsmJit</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\;.\include;.\mpfr;.\metl;</AdditionalIncludeDirectories>
       <OmitFramePointers>true</OmitFramePointers>
-      <EnableEnhancedInstructionSet>AdvancedVectorExtensions512</EnableEnhancedInstructionSet>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <BufferSecurityCheck>false</BufferSecurityCheck>
-      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <OpenMPSupport>true</OpenMPSupport>
+      <ControlFlowGuard>false</ControlFlowGuard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -102,7 +106,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>Advapi32.lib;OleAut32.lib;User32.lib;mpfr.lib;mpir.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(SolutionDir)$(Configuration)\ParserBenchmark.exe</OutputFile>
-      <AdditionalLibraryDirectories>..\mpfr\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>.\mpfr\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>copy /Y "$(SolutionDir)mpfr\dll\*.dll" "$(TargetDir)"</Command>
@@ -113,12 +117,9 @@
     <ClInclude Include=".\exprtk\exprtk.hpp" />
     <ClInclude Include=".\exprtk\exprtk_mpfr_adaptor.hpp" />
     <ClInclude Include=".\include\BenchATMSP.h" />
-    <ClInclude Include=".\include\BenchChaiScript.h" />
     <ClInclude Include=".\include\BenchExprTk.h" />
-    <ClInclude Include=".\include\BenchExprTkFloat.h" />
     <ClInclude Include=".\include\BenchExprTkMPFR.h" />
     <ClInclude Include=".\include\BenchFParser.h" />
-    <ClInclude Include=".\include\BenchLepton.h" />
     <ClInclude Include=".\include\Benchmark.h" />
     <ClInclude Include=".\include\BenchMathExpr.h" />
     <ClInclude Include=".\include\BenchMETL.h" />
@@ -126,22 +127,10 @@
     <ClInclude Include=".\include\BenchMuParser2.h" />
     <ClInclude Include=".\include\BenchMuParserSSE.h" />
     <ClInclude Include=".\include\BenchMuParserX.h" />
-    <ClInclude Include=".\include\BenchNative.h" />
     <ClInclude Include=".\include\BenchTinyExpr.h" />
     <ClInclude Include=".\include\cpuid.h" />
     <ClInclude Include=".\include\FormelGenerator.h" />
     <ClInclude Include=".\include\Stopwatch.h" />
-    <ClInclude Include=".\lepton\ExpressionProgram.h" />
-    <ClInclude Include=".\lepton\ExpressionTreeNode.h" />
-    <ClInclude Include=".\lepton\Lepton.h" />
-    <ClInclude Include=".\lepton\lepton\CompiledExpression.h" />
-    <ClInclude Include=".\lepton\lepton\CustomFunction.h" />
-    <ClInclude Include=".\lepton\lepton\Exception.h" />
-    <ClInclude Include=".\lepton\lepton\Operation.h" />
-    <ClInclude Include=".\lepton\lepton\ParsedExpression.h" />
-    <ClInclude Include=".\lepton\MSVC_erfc.h" />
-    <ClInclude Include=".\lepton\Parser.h" />
-    <ClInclude Include=".\lepton\windowsIncludes.h" />
     <ClInclude Include=".\libcpuid\amd_code_t.h" />
     <ClInclude Include=".\libcpuid\asm-bits.h" />
     <ClInclude Include=".\libcpuid\intel_code_t.h" />
@@ -237,15 +226,21 @@
     <ClInclude Include=".\muparserx\suStringTokens.h" />
     <ClInclude Include=".\muparserx\utGeneric.h" />
     <ClInclude Include=".\tinyexpr\tinyexpr.h" />
+    <ClInclude Include="BenchMuParser3.h" />
+    <ClInclude Include="muparser3\muParser.h" />
+    <ClInclude Include="muparser3\muParserBase.h" />
+    <ClInclude Include="muparser3\muParserBytecode.h" />
+    <ClInclude Include="muparser3\muParserDef.h" />
+    <ClInclude Include="muparser3\muParserError.h" />
+    <ClInclude Include="muparser3\muParserMath.h" />
+    <ClInclude Include="muparser3\muParserStack.h" />
+    <ClInclude Include="muparser3\muParserTest.h" />
+    <ClInclude Include="muparser3\muParserToken.h" />
+    <ClInclude Include="muparser3\muParserTokenReader.h" />
+    <ClInclude Include="muparser3\muPrecompiledEngines.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include=".\fparser\fparser.cc" />
-    <ClCompile Include=".\lepton\CompiledExpression.cpp" />
-    <ClCompile Include=".\lepton\ExpressionProgram.cpp" />
-    <ClCompile Include=".\lepton\ExpressionTreeNode.cpp" />
-    <ClCompile Include=".\lepton\Operation.cpp" />
-    <ClCompile Include=".\lepton\ParsedExpression.cpp" />
-    <ClCompile Include=".\lepton\Parser.cpp" />
     <ClCompile Include=".\libcpuid\asm-bits.c" />
     <ClCompile Include=".\libcpuid\cpuid_main.c" />
     <ClCompile Include=".\libcpuid\libcpuid_util.c" />
@@ -297,11 +292,9 @@
     <ClCompile Include=".\muparserx\mpValueCache.cpp" />
     <ClCompile Include=".\muparserx\mpVariable.cpp" />
     <ClCompile Include=".\src\BenchATMSP.cpp" />
-    <ClCompile Include=".\src\BenchChaiScript.cpp" />
     <ClCompile Include=".\src\BenchExprTk.cpp" />
     <ClCompile Include=".\src\BenchExprTkMPFR.cpp" />
     <ClCompile Include=".\src\BenchFParser.cpp" />
-    <ClCompile Include=".\src\BenchLepton.cpp" />
     <ClCompile Include=".\src\Benchmark.cpp" />
     <ClCompile Include=".\src\BenchMathExpr.cpp" />
     <ClCompile Include=".\src\BenchMETL.cpp" />
@@ -313,6 +306,7 @@
     <ClCompile Include=".\src\ParserBench.cpp" />
     <ClCompile Include=".\src\Stopwatch.cpp" />
     <ClCompile Include=".\tinyexpr\tinyexpr.c" />
+    <ClCompile Include="BenchMuParser3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\fparser\fparser.hh" />

@@ -1,0 +1,12 @@
+Benchmark (Shootout for file "bench_expr_weird.txt")
+
+Expression 1 of 105: "sum(1?2,3:4)"; Progress: #
+[01] muparser 2.2.4       (   73.918 ns,       5.000000000000000000, 50000000.000000000000000000)
+
+Expression 2 of 105: "+1"; Progress: #
+[01] muparser 2.2.4       (   50.051 ns,       1.000000000000000000, 10000000.000000000000000000)
+
+Expression 3 of 105: "+2+1"; Progress: #
+[01] muparser 2.2.4       (   53.712 ns,       3.000000000000000000, 30000000.000000000000000000)
+
+Expression 4 of 105: "+2-1"; Progress: #

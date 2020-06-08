@@ -24,6 +24,7 @@
 #include "Benchmark.h"
 #include "BenchMuParserX.h"
 #include "BenchMuParser2.h"
+#include "BenchMuParser3.h"
 #include "BenchATMSP.h"
 #include "BenchExprTk.h"
 #include "BenchLepton.h"
@@ -383,7 +384,7 @@ int main(int argc, const char* argv[])
 	pthread_setschedparam(pthread_self(), policy, &param);
 #endif
 
-	int iCount = 10000000;
+	int iCount = 1000000;
 
 	bool writeResultTable = false;
 
@@ -442,18 +443,18 @@ int main(int argc, const char* argv[])
 	// parser are disqualified for the round. As such it is paramount that
 	// the reference parser be precise when computing expressions.
 	//
-	benchmarks.push_back(std::make_shared<BenchMuParser2>());  // <-- Note: first parser becomes the reference!
+	benchmarks.push_back(std::make_shared<BenchMuParser2>(false));  // <-- Note: first parser becomes the reference!
+	benchmarks.push_back(std::make_shared<BenchMuParser2>());
+	benchmarks.push_back(std::make_shared<BenchMuParser3>());
 	benchmarks.push_back(std::make_shared<BenchExprTk   >());
-	benchmarks.push_back(std::make_shared<BenchMuParser2>(false));
-	benchmarks.push_back(std::make_shared<BenchMuParserX>());
+//	benchmarks.push_back(std::make_shared<BenchMuParserX>());
 	benchmarks.push_back(std::make_shared<BenchATMSP    >());
-	benchmarks.push_back(std::make_shared<BenchLepton   >());
 	benchmarks.push_back(std::make_shared<BenchFParser  >());
 	benchmarks.push_back(std::make_shared<BenchMathExpr >());
-	benchmarks.push_back(std::make_shared<BenchTinyExpr >());
+//	benchmarks.push_back(std::make_shared<BenchTinyExpr >());
 
 #ifdef ENABLE_MPFR
-	benchmarks.push_back(std::make_shared<BenchExprTkMPFR>());
+//	benchmarks.push_back(std::make_shared<BenchExprTkMPFR>());
 #endif
 
 #ifdef ENABLE_METL

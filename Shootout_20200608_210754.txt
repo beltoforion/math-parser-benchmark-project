@@ -1,0 +1,12 @@
+Benchmark (Shootout for file "bench_expr_weird.txt")
+
+Expression 1 of 105: "sum(1?2,3:4)"; Progress: ##
+[01] muparser 2.2.4 (omp) (   74.877 ns,       5.000000000000000000, 50000000.000000000000000000)
+DNQ List
+[01] METL                 (:1:0(0): parse error matching struct metl::Expr<struct metl::realLiteral,struct metl::intLiteral>)
+
+Expression 2 of 105: "+1"; Progress: ##
+[01] METL                 (   39.019 ns,       1.000000000000000000, 10000000.000000000000000000)
+[02] muparser 2.2.4 (omp) (   56.518 ns,       1.000000000000000000, 10000000.000000000000000000)
+
+Expression 3 of 105: "+2+1"; Progress: 
