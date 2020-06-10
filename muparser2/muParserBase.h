@@ -54,7 +54,7 @@ namespace mu
 
 	//--------------------------------------------------------------------------------------------------
 	/** \brief Mathematical expressions parser (base parser engine).
-		\author (C) 2004 - 2020 Ingo Berg
+		\author (C) 2013 Ingo Berg
 
 	  This is the implementation of a bytecode based mathematical expressions parser.
 	  The formula will be parsed from string and converted into a bytecode.
@@ -174,7 +174,9 @@ namespace mu
 		void SetArgSep(char_type cArgSep);
 		char_type GetArgSep() const;
 
-		void  Error(EErrorCodes a_iErrc, int a_iPos = (int)mu::string_type::npos, const string_type& a_strTok = string_type()) const;
+		void  Error(EErrorCodes a_iErrc,
+			int a_iPos = (int)mu::string_type::npos,
+			const string_type& a_strTok = string_type()) const;
 
 	protected:
 
@@ -255,7 +257,7 @@ namespace mu
 
 		value_type ParseString() const;
 		value_type ParseCmdCode() const;
-		value_type ParseVal() const;
+		value_type ParseCmdCodeShort() const;
 		value_type ParseCmdCodeBulk(int nOffset, int nThreadID) const;
 
 		void  CheckName(const string_type& a_strName, const string_type& a_CharSet) const;

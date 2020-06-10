@@ -90,7 +90,7 @@ namespace mu
 
 	\author (C) 2004-2020 Ingo Berg
   */
-	class ParserByteCode
+	class ParserByteCode final
 	{
 	private:
 
@@ -134,9 +134,20 @@ namespace mu
 		void Finalize();
 		void clear();
 		std::size_t GetMaxStackSize() const;
-		std::size_t GetSize() const;
 
-		const SToken* GetBase() const;
+		std::size_t ParserByteCode::GetSize() const
+		{
+			return m_vRPN.size();
+		}
+
+		inline const SToken* GetBase() const
+		{
+			if (m_vRPN.size() == 0)
+				throw ParserError(ecINTERNAL_ERROR);
+			else
+				return &m_vRPN[0];
+		}
+
 		void AsciiDump();
 	};
 

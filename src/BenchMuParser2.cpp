@@ -273,7 +273,7 @@ double BenchMuParser2::DoBenchmark(const std::string& sExpr, long iCount)
 std::string BenchMuParser2::GetShortName() const
 {
 	if (m_bUseBulkMode)
-		return "muparser 2.2.4 (omp)";
+		return "muparser " + mu::ParserVersion + " (omp)";
 	else
-		return "muparser 2.2.4";
+		return "muparser " + mu::ParserVersion;
 }

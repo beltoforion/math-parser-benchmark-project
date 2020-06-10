@@ -292,14 +292,13 @@ void Shootout(const std::string& sCaption,
 	output(pRes, "  - Release build\n");
 #endif
 
-#if defined (__GNUC__)
-	output(pRes, "  - Compiled with GCC Version %d.%d.%d\n", __GNUC__, __GNUC_MINOR__, __GNUC_PATCHLEVEL__);
+#if defined(__clang__)
+	output(pRes, "  - Compiled with CLANG Version %d.%d.%d\n", __clang_major__, __clang_minor__, __clang_patchlevel__);
 #elif defined(_MSC_VER)
 	output(pRes, "  - Compiled with MSVC Version %d\n", _MSC_VER);
-#elif defined(__clang__)
-	output(pRes, "  - Compiled with CLANG Version %d.%d.%d\n", __clang_major__, __clang_minor__, __clang_patchlevel__);
+#elif defined (__GNUC__)
+	output(pRes, "  - Compiled with GCC Version %d.%d.%d\n", __GNUC__, __GNUC_MINOR__, __GNUC_PATCHLEVEL__);
 #endif
-
 
 	output(pRes, "  - IEEE 754 (IEC 559) is %s\n", (std::numeric_limits<double>::is_iec559) ? "Available" : " NOT AVAILABLE");
 	output(pRes, "  - %d-bit build\n", sizeof(void*) * 8);
@@ -390,16 +389,18 @@ int main(int argc, const char* argv[])
 
 	const std::string benchmark_file_set[] =
 	{
-	   "bench_expr.txt",
-	   "bench_expr_all.txt",
-	   "bench_expr_weird.txt",
-	   "bench_expr_extensive.txt",
-	   "bench_expr_random_with_functions.txt",
-	   "bench_precedence.txt",
-	   "bench_expr_complete.txt"
+		"bench_bugsearch.txt",
+		"bench_short.txt",
+		"bench_expr.txt",
+		"bench_expr_all.txt",
+		"bench_expr_weird.txt",
+		"bench_expr_extensive.txt",
+		"bench_expr_random_with_functions.txt",
+		"bench_precedence.txt",
+		"bench_expr_complete.txt"
 	};
 
-	std::string benchmark_file = benchmark_file_set[1];
+	std::string benchmark_file = benchmark_file_set[0];
 
 	// Usage:
 	// 1. ParserBench
@@ -446,12 +447,12 @@ int main(int argc, const char* argv[])
 	benchmarks.push_back(std::make_shared<BenchExprTk   >());   // <-- Note: first parser becomes the reference!
 	benchmarks.push_back(std::make_shared<BenchMuParser2>(false));
 //	benchmarks.push_back(std::make_shared<BenchMuParser2>());
-	benchmarks.push_back(std::make_shared<BenchMuParser3>());
+//	benchmarks.push_back(std::make_shared<BenchMuParser3>());
 
 //	benchmarks.push_back(std::make_shared<BenchMuParserX>());
 	benchmarks.push_back(std::make_shared<BenchATMSP    >());
 	benchmarks.push_back(std::make_shared<BenchFParser  >());
-	benchmarks.push_back(std::make_shared<BenchMathExpr >());
+//	benchmarks.push_back(std::make_shared<BenchMathExpr >());
 //	benchmarks.push_back(std::make_shared<BenchTinyExpr >());
 
 #ifdef ENABLE_MPFR
@@ -459,7 +460,7 @@ int main(int argc, const char* argv[])
 #endif
 
 #ifdef ENABLE_METL
-//	benchmarks.push_back(std::make_shared<BenchMETL>());
+	benchmarks.push_back(std::make_shared<BenchMETL>());
 #endif
 
 	Shootout(benchmark_file, benchmarks, vExpr, iCount, writeResultTable);
