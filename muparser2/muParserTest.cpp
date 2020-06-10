@@ -1,27 +1,33 @@
 /*
-				 __________
-	_____   __ __\______   \_____  _______  ______  ____ _______
-   /     \ |  |  \|     ___/\__  \ \_  __ \/  ___/_/ __ \\_  __ \
-  |  Y Y  \|  |  /|    |     / __ \_|  | \/\___ \ \  ___/ |  | \/
-  |__|_|  /|____/ |____|    (____  /|__|  /____  > \___  >|__|
-		\/                       \/            \/      \/
-  Copyright (C) 2013 Ingo Berg
 
-  Permission is hereby granted, free of charge, to any person obtaining a copy of this
-  software and associated documentation files (the "Software"), to deal in the Software
-  without restriction, including without limitation the rights to use, copy, modify,
-  merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
-  permit persons to whom the Software is furnished to do so, subject to the following conditions:
+	   _____  __ _____________ _______  ______ ___________
+	  /     \|  |  \____ \__  \\_  __ \/  ___// __ \_  __ \
+	 |  Y Y  \  |  /  |_> > __ \|  | \/\___ \\  ___/|  | \/
+	 |__|_|  /____/|   __(____  /__|  /____  >\___  >__|
+		   \/      |__|       \/           \/     \/
 
-  The above copyright notice and this permission notice shall be included in all copies or
-  substantial portions of the Software.
 
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT
-  NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-  DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+  Copyright (C) 2004 - 2020 Ingo Berg
+
+	Redistribution and use in source and binary forms, with or without modification, are permitted
+	provided that the following conditions are met:
+
+	  * Redistributions of source code must retain the above copyright notice, this list of
+		conditions and the following disclaimer.
+	  * Redistributions in binary form must reproduce the above copyright notice, this list of
+		conditions and the following disclaimer in the documentation and/or other materials provided
+		with the distribution.
+
+	THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
+	IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+	FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+	CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+	DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+	DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+	IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
+	OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
+
 
 #include "muParserTest.h"
 
@@ -133,18 +139,26 @@ namespace mu
 			int iStat = 0;
 			mu::console() << _T("testing string arguments...");
 
+			// from oss-fuzz: https://oss-fuzz.com/testcase-detail/5106868061208576
+			iStat += ThrowTest(_T("\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",8"), ecSTR_RESULT);
+			// variations:
+			iStat += ThrowTest(_T("\"\",\"\",9"), ecSTR_RESULT);
+
 			iStat += EqnTest(_T("valueof(\"\")"), 123, true);   // empty string arguments caused a crash
 			iStat += EqnTest(_T("valueof(\"aaa\")+valueof(\"bbb\")  "), 246, true);
 			iStat += EqnTest(_T("2*(valueof(\"aaa\")-23)+valueof(\"bbb\")"), 323, true);
+
 			// use in expressions with variables
 			iStat += EqnTest(_T("a*(atof(\"10\")-b)"), 8, true);
 			iStat += EqnTest(_T("a-(atof(\"10\")*b)"), -19, true);
+
 			// string + numeric arguments
 			iStat += EqnTest(_T("strfun1(\"100\")"), 100, true);
 			iStat += EqnTest(_T("strfun2(\"100\",1)"), 101, true);
 			iStat += EqnTest(_T("strfun3(\"99\",1,2)"), 102, true);
 			iStat += EqnTest(_T("strfun4(\"99\",1,2,3)"), 105, true);
 			iStat += EqnTest(_T("strfun5(\"99\",1,2,3,4)"), 109, true);
+
 			// string constants
 			iStat += EqnTest(_T("atof(str1)+atof(str2)"), 3.33, true);
 
@@ -908,6 +922,9 @@ namespace mu
 			int iStat = 0;
 			mu::console() << _T("testing if-then-else operator...");
 
+			// from oss-fuzz.com: https://oss-fuzz.com/testcase-detail/4777121158529024
+			iStat += ThrowTest(_T("3!=min(0?2>2,2>5,1:6)"), ecUNEXPECTED_ARG_SEP);
+
 			// Test error detection
 			iStat += ThrowTest(_T(":3"), ecUNEXPECTED_CONDITIONAL);
 			iStat += ThrowTest(_T("? 1 : 2"), ecUNEXPECTED_CONDITIONAL);
@@ -919,16 +936,18 @@ namespace mu
 			iStat += ThrowTest(_T("1 : 2"), ecMISPLACED_COLON);
 			iStat += ThrowTest(_T("(1) ? 1 : 2 : 3"), ecMISPLACED_COLON);
 			iStat += ThrowTest(_T("(true) ? 1 : 2 : 3"), ecUNASSIGNABLE_TOKEN);
-
+			
 			// from oss-fzz.com: UNKNOWN READ; https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=22922#c1
 			iStat += ThrowTest(_T("1?2:0?(7:1)"), ecMISPLACED_COLON);
 
 			// from oss-fuzz.com: https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=22938
-			iStat += ThrowTest(_T("sum(0?1,0,0:3)"), ecMISPLACED_COLON);
-			iStat += ThrowTest(_T("sum(0?(1,0,0):3)"), ecMISPLACED_COLON);
-			iStat += ThrowTest(_T("sum(2>3?2,4,2:4)"), ecMISPLACED_COLON);
-			iStat += ThrowTest(_T("sum(2>3?2,4,sin(2):4)"), ecMISPLACED_COLON);
-			iStat += ThrowTest(_T("sum(2>3?sin(2),4,2:4)"), ecMISPLACED_COLON);
+			iStat += ThrowTest(_T("sum(0?1,0,0:3)"), ecUNEXPECTED_ARG_SEP);
+			iStat += ThrowTest(_T("sum(0?(1,0,0):3)"), ecUNEXPECTED_ARG);
+			iStat += ThrowTest(_T("sum(2>3?2,4,2:4)"), ecUNEXPECTED_ARG_SEP);
+			iStat += ThrowTest(_T("sum(2>3?2,4,sin(2):4)"), ecUNEXPECTED_ARG_SEP);
+			iStat += ThrowTest(_T("sum(2>3?sin(2),4,2:4)"), ecUNEXPECTED_ARG_SEP);
+			iStat += ThrowTest(_T("sum(2>3?sin(a),4,2:4)"), ecUNEXPECTED_ARG_SEP);
+			iStat += ThrowTest(_T("sum(2>3?sin(2),4,2:4)"), ecUNEXPECTED_ARG_SEP);
 
 			iStat += EqnTest(_T("1 ? 128 : 255"), 128, true);
 			iStat += EqnTest(_T("1<2 ? 128 : 255"), 128, true);
@@ -1055,8 +1074,8 @@ namespace mu
 			iStat += ThrowTest(_T("valueof(\"\\\"abc\\\"\")"), 999, false);
 			iStat += ThrowTest(_T("\"hello world\""), ecSTR_RESULT);
 			iStat += ThrowTest(_T("(\"hello world\")"), ecSTR_RESULT);
-			iStat += ThrowTest(_T("\"abcd\"+100"), ecOPRT_TYPE_CONFLICT);
-			iStat += ThrowTest(_T("\"a\"+\"b\""), ecOPRT_TYPE_CONFLICT);
+			iStat += ThrowTest(_T("\"abcd\"+100"), ecSTR_RESULT);
+			iStat += ThrowTest(_T("\"a\"+\"b\""), ecSTR_RESULT);
 			iStat += ThrowTest(_T("strfun1(\"100\",3)"), ecTOO_MANY_PARAMS);
 			iStat += ThrowTest(_T("strfun2(\"100\",3,5)"), ecTOO_MANY_PARAMS);
 			iStat += ThrowTest(_T("strfun3(\"100\",3,5,6)"), ecTOO_MANY_PARAMS);
@@ -1075,7 +1094,7 @@ namespace mu
 			// assignment operator
 			iStat += ThrowTest(_T("3=4"), ecUNEXPECTED_OPERATOR);
 			iStat += ThrowTest(_T("sin(8)=4"), ecUNEXPECTED_OPERATOR);
-			iStat += ThrowTest(_T("\"test\"=a"), ecUNEXPECTED_OPERATOR);
+			iStat += ThrowTest(_T("\"test\"=a"), ecSTR_RESULT);
 
 			// <ibg 20090529>
 			// this is now legal, for reference see:

@@ -596,6 +596,9 @@ MUP_NAMESPACE_START
         iStat += EqnTest( _SL("2*b*5 + 4*b"), 28, true);
         iStat += EqnTest( _SL("2*a/3"), (TValue)2.0/(TValue)3.0, true);
 
+        iStat += EqnTest(_SL("((1.1 + a) / 2.2) + (b - (3.3 * c))"), (TValue)-6.9454545, true);
+        
+
         // Addition auf cmVARMUL 
         iStat += EqnTest( _SL("3+b"), b+3, true);
         iStat += EqnTest( _SL("b+3"), b+3, true);

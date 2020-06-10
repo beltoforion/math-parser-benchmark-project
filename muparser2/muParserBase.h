@@ -1,10 +1,12 @@
 /*
-				 __________
-	_____   __ __\______   \_____  _______  ______  ____ _______
-   /     \ |  |  \|     ___/\__  \ \_  __ \/  ___/_/ __ \\_  __ \
-  |  Y Y  \|  |  /|    |     / __ \_|  | \/\___ \ \  ___/ |  | \/
-  |__|_|  /|____/ |____|    (____  /|__|  /____  > \___  >|__|
-		\/                       \/            \/      \/
+
+       _____  __ _____________ _______  ______ ___________
+      /     \|  |  \____ \__  \\_  __ \/  ___// __ \_  __ \
+     |  Y Y  \  |  /  |_> > __ \|  | \/\___ \\  ___/|  | \/
+     |__|_|  /____/|   __(____  /__|  /____  >\___  >__|
+           \/      |__|       \/           \/     \/
+
+
   Copyright (C) 2004 - 2020 Ingo Berg
 
 	Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -39,7 +41,6 @@
 
 //--- Parser includes --------------------------------------------------------------------------
 #include "muParserDef.h"
-#include "muParserStack.h"
 #include "muParserTokenReader.h"
 #include "muParserBytecode.h"
 #include "muParserError.h"
@@ -53,7 +54,7 @@ namespace mu
 
 	//--------------------------------------------------------------------------------------------------
 	/** \brief Mathematical expressions parser (base parser engine).
-		\author (C) 2013 Ingo Berg
+		\author (C) 2004 - 2020 Ingo Berg
 
 	  This is the implementation of a bytecode based mathematical expressions parser.
 	  The formula will be parsed from string and converted into a bytecode.
@@ -107,14 +108,14 @@ namespace mu
 
 		virtual ~ParserBase();
 
-		value_type  Eval() const;
-		value_type* Eval(int& nStackSize) const;
-		void Eval(value_type* results, int nBulkSize);
+		inline value_type  Eval() const;
+		inline value_type* Eval(int& nStackSize) const;
+		inline void Eval(value_type* results, int nBulkSize);
 
 		int GetNumResults() const;
 
 		void SetExpr(const string_type& a_sExpr);
-		void SetVarFactory(facfun_type a_pFactory, void* pUserData = NULL);
+		void SetVarFactory(facfun_type a_pFactory, void* pUserData = nullptr);
 
 		void SetDecSep(char_type cDecSep);
 		void SetThousandsSep(char_type cThousandsSep = 0);
@@ -138,11 +139,7 @@ namespace mu
 			AddCallback(a_strName, ParserCallback(a_pFun, a_bAllowOpt), m_FunDef, ValidNameChars());
 		}
 
-		void DefineOprt(const string_type& a_strName,
-			fun_type2 a_pFun,
-			unsigned a_iPri = 0,
-			EOprtAssociativity a_eAssociativity = oaLEFT,
-			bool a_bAllowOpt = false);
+		void DefineOprt(const string_type& a_strName, fun_type2 a_pFun, unsigned a_iPri = 0, EOprtAssociativity a_eAssociativity = oaLEFT, bool a_bAllowOpt = false);
 		void DefineConst(const string_type& a_sName, value_type a_fVal);
 		void DefineStrConst(const string_type& a_sName, const string_type& a_strVal);
 		void DefineVar(const string_type& a_sName, value_type* a_fVar);
@@ -177,9 +174,7 @@ namespace mu
 		void SetArgSep(char_type cArgSep);
 		char_type GetArgSep() const;
 
-		void  Error(EErrorCodes a_iErrc,
-			int a_iPos = (int)mu::string_type::npos,
-			const string_type& a_strTok = string_type()) const;
+		void  Error(EErrorCodes a_iErrc, int a_iPos = (int)mu::string_type::npos, const string_type& a_strTok = string_type()) const;
 
 	protected:
 
@@ -245,25 +240,13 @@ namespace mu
 		void InitTokenReader();
 		void ReInit() const;
 
-		void AddCallback(const string_type& a_strName,
-			const ParserCallback& a_Callback,
-			funmap_type& a_Storage,
-			const char_type* a_szCharSet);
+		void AddCallback(const string_type& a_strName, const ParserCallback& a_Callback, funmap_type& a_Storage, const char_type* a_szCharSet);
+		void ApplyRemainingOprt(std::stack<token_type>& a_stOpt, std::stack<token_type>& a_stVal) const;
+		void ApplyBinOprt(std::stack<token_type>& a_stOpt, std::stack<token_type>& a_stVal) const;
+		void ApplyIfElse(std::stack<token_type>& a_stOpt, std::stack<token_type>& a_stVal) const;
+		void ApplyFunc(std::stack<token_type>& a_stOpt, std::stack<token_type>& a_stVal, int iArgCount) const;
 
-		void ApplyRemainingOprt(ParserStack<token_type>& a_stOpt,
-			ParserStack<token_type>& a_stVal) const;
-		void ApplyBinOprt(ParserStack<token_type>& a_stOpt,
-			ParserStack<token_type>& a_stVal) const;
-
-		void ApplyIfElse(ParserStack<token_type>& a_stOpt,
-			ParserStack<token_type>& a_stVal) const;
-
-		void ApplyFunc(ParserStack<token_type>& a_stOpt,
-			ParserStack<token_type>& a_stVal,
-			int iArgCount) const;
-
-		token_type ApplyStrFunc(const token_type& a_FunTok,
-			const std::vector<token_type>& a_vArg) const;
+		token_type ApplyStrFunc(const token_type& a_FunTok, const std::vector<token_type>& a_vArg) const;
 
 		int GetOprtPrecedence(const token_type& a_Tok) const;
 		EOprtAssociativity GetOprtAssociativity(const token_type& a_Tok) const;
@@ -272,15 +255,13 @@ namespace mu
 
 		value_type ParseString() const;
 		value_type ParseCmdCode() const;
+		value_type ParseVal() const;
 		value_type ParseCmdCodeBulk(int nOffset, int nThreadID) const;
 
 		void  CheckName(const string_type& a_strName, const string_type& a_CharSet) const;
-		void  CheckOprt(const string_type& a_sName,
-			const ParserCallback& a_Callback,
-			const string_type& a_szCharSet) const;
+		void  CheckOprt(const string_type& a_sName, const ParserCallback& a_Callback, const string_type& a_szCharSet) const;
 
-		void StackDump(const ParserStack<token_type >& a_stVal,
-			const ParserStack<token_type >& a_stOprt) const;
+		void StackDump(const std::stack<token_type >& a_stVal, const std::stack<token_type >& a_stOprt) const;
 
 		/** \brief Pointer to the parser function.
 
@@ -306,8 +287,6 @@ namespace mu
 		string_type m_sNameChars;      ///< Charset for names
 		string_type m_sOprtChars;      ///< Charset for postfix/ binary operator tokens
 		string_type m_sInfixOprtChars; ///< Charset for infix operator tokens
-
-		mutable int m_nIfElseCounter;  ///< Internal counter for keeping track of nested if-then-else clauses
 
 		// items merely used for caching state information
 		mutable valbuf_type m_vStackBuffer; ///< This is merely a buffer used for the stack in the cmd parsing routine

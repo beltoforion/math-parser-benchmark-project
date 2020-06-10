@@ -1,10 +1,12 @@
 /*
-				 __________
-	_____   __ __\______   \_____  _______  ______  ____ _______
-   /     \ |  |  \|     ___/\__  \ \_  __ \/  ___/_/ __ \\_  __ \
-  |  Y Y  \|  |  /|    |     / __ \_|  | \/\___ \ \  ___/ |  | \/
-  |__|_|  /|____/ |____|    (____  /|__|  /____  > \___  >|__|
-		\/                       \/            \/      \/
+
+	   _____  __ _____________ _______  ______ ___________
+	  /     \|  |  \____ \__  \\_  __ \/  ___// __ \_  __ \
+	 |  Y Y  \  |  /  |_> > __ \|  | \/\___ \\  ___/|  | \/
+	 |__|_|  /____/|   __(____  /__|  /____  >\___  >__|
+		   \/      |__|       \/           \/     \/
+
+
   Copyright (C) 2004 - 2020 Ingo Berg
 
 	Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -26,6 +28,7 @@
 	OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+
 #include "muParserBytecode.h"
 
 #include <algorithm>
@@ -37,7 +40,6 @@
 #include "muParserDef.h"
 #include "muParserError.h"
 #include "muParserToken.h"
-#include "muParserStack.h"
 #include "muParserTemplateMagic.h"
 
 
@@ -241,8 +243,8 @@ namespace mu
 						(m_vRPN[sz - 1].Cmd == cmVARMUL && m_vRPN[sz - 2].Cmd == cmVARMUL && m_vRPN[sz - 2].Val.ptr == m_vRPN[sz - 1].Val.ptr))
 					{
 						MUP_ASSERT((m_vRPN[sz - 2].Val.ptr == nullptr && m_vRPN[sz - 1].Val.ptr != nullptr) ||
-								   (m_vRPN[sz - 2].Val.ptr != nullptr && m_vRPN[sz - 1].Val.ptr == nullptr) ||
-							       (m_vRPN[sz - 2].Val.ptr == m_vRPN[sz - 1].Val.ptr));
+							(m_vRPN[sz - 2].Val.ptr != nullptr && m_vRPN[sz - 1].Val.ptr == nullptr) ||
+							(m_vRPN[sz - 2].Val.ptr == m_vRPN[sz - 1].Val.ptr));
 
 						m_vRPN[sz - 2].Cmd = cmVARMUL;
 						m_vRPN[sz - 2].Val.ptr = (value_type*)((long long)(m_vRPN[sz - 2].Val.ptr) | (long long)(m_vRPN[sz - 1].Val.ptr));    // variable
@@ -264,8 +266,9 @@ namespace mu
 						m_vRPN.pop_back();
 						bOptimized = true;
 					}
-					else if ((m_vRPN[sz - 1].Cmd == cmVAL && m_vRPN[sz - 2].Cmd == cmVARMUL) ||
-							 (m_vRPN[sz - 1].Cmd == cmVARMUL && m_vRPN[sz - 2].Cmd == cmVAL))
+					else if (
+						(m_vRPN[sz - 1].Cmd == cmVAL && m_vRPN[sz - 2].Cmd == cmVARMUL) ||
+						(m_vRPN[sz - 1].Cmd == cmVARMUL && m_vRPN[sz - 2].Cmd == cmVAL))
 					{
 						// Optimization: 2*(3*b+1) or (3*b+1)*2 -> 6*b+2
 						m_vRPN[sz - 2].Cmd = cmVARMUL;
@@ -283,7 +286,8 @@ namespace mu
 						m_vRPN.pop_back();
 						bOptimized = true;
 					}
-					else if (m_vRPN[sz - 1].Cmd == cmVAR && m_vRPN[sz - 2].Cmd == cmVAR &&
+					else if (
+						m_vRPN[sz - 1].Cmd == cmVAR && m_vRPN[sz - 2].Cmd == cmVAR &&
 						m_vRPN[sz - 1].Val.ptr == m_vRPN[sz - 2].Val.ptr)
 					{
 						// Optimization: a*a -> a^2
@@ -304,8 +308,8 @@ namespace mu
 					}
 					break;
 
-				default:
 					// no optimization for other opcodes
+				default:
 					break;
 				} // switch a_Oprt
 			}
@@ -358,22 +362,66 @@ namespace mu
 	*/
 	void ParserByteCode::AddFun(generic_fun_type a_pFun, int a_iArgc)
 	{
-		if (a_iArgc >= 0)
+		std::size_t sz = m_vRPN.size();
+		bool optimize = false;
+
+		// only optimize functions with fixed number of more than a single arguments
+		if (m_bEnableOptimizer && a_iArgc > 0)
 		{
-			m_iStackPos = m_iStackPos - a_iArgc + 1;
+			optimize = true;
+			for (int i = 1; i <= std::abs(a_iArgc); ++i)
+			{
+				if (m_vRPN[sz - i].Cmd != cmVAL)
+				{
+					optimize = false;
+					break;
+				}
+			}
+		}
+
+		if (optimize)
+		{
+			value_type val = 0;
+			int sidx = 0;
+			switch (a_iArgc)
+			{
+			case 1:  val = (*reinterpret_cast<fun_type1>(a_pFun))(m_vRPN[sz - 1].Val.data2);   break;
+			case 2:  val = (*reinterpret_cast<fun_type2>(a_pFun))(m_vRPN[sz - 2].Val.data2, m_vRPN[sz - 1].Val.data2); break;
+			case 3:  val = (*reinterpret_cast<fun_type3>(a_pFun))(m_vRPN[sz - 3].Val.data2, m_vRPN[sz - 2].Val.data2, m_vRPN[sz - 1].Val.data2); break;
+			case 4:  val = (*reinterpret_cast<fun_type4>(a_pFun))(m_vRPN[sz - 4].Val.data2, m_vRPN[sz - 3].Val.data2, m_vRPN[sz - 2].Val.data2, m_vRPN[sz - 1].Val.data2); break;
+			case 5:  val = (*reinterpret_cast<fun_type5>(a_pFun))(m_vRPN[sz - 5].Val.data2, m_vRPN[sz - 4].Val.data2, m_vRPN[sz - 3].Val.data2, m_vRPN[sz - 2].Val.data2, m_vRPN[sz - 1].Val.data2); break;
+			case 6:  val = (*reinterpret_cast<fun_type6>(a_pFun))(m_vRPN[sz - 6].Val.data2, m_vRPN[sz - 5].Val.data2, m_vRPN[sz - 4].Val.data2, m_vRPN[sz - 3].Val.data2, m_vRPN[sz - 2].Val.data2, m_vRPN[sz - 1].Val.data2); break;
+			case 7:  val = (*reinterpret_cast<fun_type7>(a_pFun))(m_vRPN[sz - 7].Val.data2, m_vRPN[sz - 6].Val.data2, m_vRPN[sz - 5].Val.data2, m_vRPN[sz - 4].Val.data2, m_vRPN[sz - 3].Val.data2, m_vRPN[sz - 2].Val.data2, m_vRPN[sz - 1].Val.data2); break;
+			case 8:  val = (*reinterpret_cast<fun_type8>(a_pFun))(m_vRPN[sz - 8].Val.data2, m_vRPN[sz - 7].Val.data2, m_vRPN[sz - 6].Val.data2, m_vRPN[sz - 5].Val.data2, m_vRPN[sz - 4].Val.data2, m_vRPN[sz - 3].Val.data2, m_vRPN[sz - 2].Val.data2, m_vRPN[sz - 1].Val.data2); break;
+			case 9:  val = (*reinterpret_cast<fun_type9>(a_pFun))(m_vRPN[sz - 9].Val.data2, m_vRPN[sz - 8].Val.data2, m_vRPN[sz - 7].Val.data2, m_vRPN[sz - 6].Val.data2, m_vRPN[sz - 5].Val.data2, m_vRPN[sz - 4].Val.data2, m_vRPN[sz - 3].Val.data2, m_vRPN[sz - 2].Val.data2, m_vRPN[sz - 1].Val.data2); break;
+			case 10: val = (*reinterpret_cast<fun_type10>(a_pFun))(m_vRPN[sz - 10].Val.data2, m_vRPN[sz - 9].Val.data2, m_vRPN[sz - 8].Val.data2, m_vRPN[sz - 7].Val.data2, m_vRPN[sz - 6].Val.data2, m_vRPN[sz - 5].Val.data2, m_vRPN[sz - 4].Val.data2, m_vRPN[sz - 3].Val.data2, m_vRPN[sz - 2].Val.data2, m_vRPN[sz - 1].Val.data2); break;
+			default:
+				// For now functions with unlimited number of arguments are not optimized
+				throw ParserError(ecINTERNAL_ERROR);
+			}
+
+			// remove the folded values
+			m_vRPN.erase(m_vRPN.end() - a_iArgc, m_vRPN.end());
+
+			SToken tok;
+			tok.Cmd = cmVAL;
+			tok.Val.data = 0;
+			tok.Val.data2 = val;
+			tok.Val.ptr = nullptr;
+			m_vRPN.push_back(tok);
 		}
 		else
 		{
-			// function with unlimited number of arguments
-			m_iStackPos = m_iStackPos + a_iArgc + 1;
+			SToken tok;
+			tok.Cmd = cmFUNC;
+			tok.Fun.argc = a_iArgc;
+			tok.Fun.ptr = a_pFun;
+			m_vRPN.push_back(tok);
 		}
+
+		m_iStackPos = m_iStackPos - std::abs(a_iArgc) + 1;
 		m_iMaxStackSize = std::max(m_iMaxStackSize, (size_t)m_iStackPos);
 
-		SToken tok;
-		tok.Cmd = cmFUNC;
-		tok.Fun.argc = a_iArgc;
-		tok.Fun.ptr = a_pFun;
-		m_vRPN.push_back(tok);
 	}
 
 	//---------------------------------------------------------------------------
@@ -429,7 +477,7 @@ namespace mu
 		rpn_type(m_vRPN).swap(m_vRPN);     // shrink bytecode vector to fit
 
 		// Determine the if-then-else jump offsets
-		ParserStack<int> stIf, stElse;
+		std::stack<int> stIf, stElse;
 		int idx;
 		for (int i = 0; i < (int)m_vRPN.size(); ++i)
 		{
@@ -441,12 +489,14 @@ namespace mu
 
 			case  cmELSE:
 				stElse.push(i);
-				idx = stIf.pop();
+				idx = stIf.top();
+				stIf.pop();
 				m_vRPN[idx].Oprt.offset = i - idx;
 				break;
 
 			case cmENDIF:
-				idx = stElse.pop();
+				idx = stElse.top();
+				stElse.pop();
 				m_vRPN[idx].Oprt.offset = i - idx;
 				break;
 

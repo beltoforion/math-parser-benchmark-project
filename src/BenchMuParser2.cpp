@@ -52,6 +52,7 @@ double BenchMuParser2::DoBenchmarkStd(const std::string& sExpr, long iCount)
 	p.DefineConst("pi", (double)M_PI);
 	p.DefineConst("e", (double)M_E);
 
+//	p.EnableDebugDump(1, 0);
 	try
 	{
 

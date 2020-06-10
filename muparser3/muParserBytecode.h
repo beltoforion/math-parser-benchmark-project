@@ -282,21 +282,7 @@ public:
 			return;
 		}
 
-		TString sEngineBits;
-
-		if (m_nEngineID > 0)
-		{
-			for (int i = m_vRPN.size() - 2; i >= 0; --i)
-			{
-				sEngineBits += (m_nEngineID & 1 << i) ? 'V' : 'C';
-			}
-		}
-		else
-		{
-			sEngineBits = _SL("N/A");
-		}
-
-		_OUT << _SL("Engine ID:") << std::dec << m_nEngineID << _SL(";  Code: ") << sEngineBits;
+		_OUT << _SL("Engine ID:") << std::dec << m_nEngineID;
 		_OUT << _SL(";  Number of tokens:") << (int)m_vRPN.size() - 1 << _SL("\n");
 		for (std::size_t i = 0; i < m_vRPN.size() && m_vRPN[i].Cmd != cmEND; ++i)
 		{
@@ -347,208 +333,197 @@ private:
 	int m_nEngineID;
 
 	//-------------------------------------------------------------------------------------------
-	bool TryOptimizeAddSub(token_type& /*tok*/)
+	bool TryOptimizeAddSub(token_type& tok)
 	{
-		return false;
 		/*
-				std::size_t sz = m_vRPN.size();
+						std::size_t sz = m_vRPN.size();
 
-				// 0.) Transform minus operations into an addition of a negative value. This will make
-				//     further optimization easier since i only have to deal with additions.
-				if (sz>=1 && m_vRPN[sz-1].Cmd == cmVAL_EX && tok.Cmd == cmOPRT_BIN && tok.Ident==_SL("-") )
-				{
-				  // change sign of the last value
-				  if (m_vRPN[sz-1].Val.mul!=0)
-					m_vRPN[sz-1].Val.mul *= -1;
+						// 0.) Transform minus operations into an addition of a negative value. This will make
+						//     further optimization easier since i only have to deal with additions.
+						if (sz>=1 && m_vRPN[sz-1].Cmd == cmVAL_EX && tok.Cmd == cmOPRT_BIN && tok.Ident==_SL("-") )
+						{
+						  // change sign of the last value
+						  if (m_vRPN[sz-1].Val.mul!=0)
+							m_vRPN[sz-1].Val.mul *= -1;
 
-				  if (m_vRPN[sz-1].Val.fixed!=0)
-					m_vRPN[sz-1].Val.fixed *= -1;
+						  if (m_vRPN[sz-1].Val.fixed!=0)
+							m_vRPN[sz-1].Val.fixed *= -1;
 
-				  // transform the subtraction into an addition
-				  tok.Fun.ptr = MathImpl<TValue, TString>::Add;
-				  tok.Ident = _SL("+");
+						  // transform the subtraction into an addition
+						  tok.Fun.ptr = MathImpl<TValue, TString>::Add;
+						  tok.Ident = _SL("+");
 
-				  // maybe there is another addition directly in front?
-				  if (sz>=2 && m_vRPN[sz-2].Cmd==cmFUNC && m_vRPN[sz-2].Ident==_SL("+") && m_vRPN[sz-1].Cmd==cmVAL_EX)
-				  {
-					token_type t1 = m_vRPN[sz-1];
-					token_type t2 = m_vRPN[sz-2];
-					RemoveTok();
-					RemoveTok();
+						  // maybe there is another addition directly in front?
+						  if (sz>=2 && m_vRPN[sz-2].Cmd==cmFUNC && m_vRPN[sz-2].Ident==_SL("+") && m_vRPN[sz-1].Cmd==cmVAL_EX)
+						  {
+							token_type t1 = m_vRPN[sz-1];
+							token_type t2 = m_vRPN[sz-2];
+							RemoveTok();
+							RemoveTok();
 
-					AddVal(t1);
-					AddFun(t2);
+							AddVal(t1);
+							AddFun(t2);
 
-					sz = m_vRPN.size(); // update size; AddFun may have been optimized away
-				  }
-				  else
-				  {
-					// return false since tok must be pushed regardless of this optimization
-					return false;
-				  }
-				}
+							sz = m_vRPN.size(); // update size; AddFun may have been optimized away
+						  }
+						  else
+						  {
+							// return false since tok must be pushed regardless of this optimization
+							return false;
+						  }
+						}
 
-				// 1.) Test try to join values by partially calculating the result and storing it into a
-				//     val_ex
-				//
-				// Simple optimization based on pattern recognition for a shitload of different
-				// bytecode combinations of addition/subtraction
-				//
-				// If possible Addition/Subtraction is applied immediately and the value tokens
-				// are joined.
-				if (sz>=2 && m_vRPN[sz-1].Cmd == cmVAL_EX && m_vRPN[sz-2].Cmd == cmVAL_EX)
-				{
-				  if ( (m_vRPN[sz-1].Val.mul==0 && m_vRPN[sz-2].Val.mul==0) ||
-					   (m_vRPN[sz-1].Val.mul==0 && m_vRPN[sz-2].Val.mul!=0) ||
-					   (m_vRPN[sz-1].Val.mul!=0 && m_vRPN[sz-2].Val.mul==0) ||
-					   (m_vRPN[sz-1].Val.ptr==m_vRPN[sz-2].Val.ptr) )
-				  {
-					m_vRPN[sz-2].Val.ptr    = (m_vRPN[sz-1].Val.mul==0) ? m_vRPN[sz-2].Val.ptr : m_vRPN[sz-1].Val.ptr;
-					m_vRPN[sz-2].Val.fixed += ((tok.Ident==_SL("-")) ? -1 : 1) * m_vRPN[sz-1].Val.fixed;
-					m_vRPN[sz-2].Val.mul   += ((tok.Ident==_SL("-")) ? -1 : 1) * m_vRPN[sz-1].Val.mul;
+						// 1.) Test try to join values by partially calculating the result and storing it into a
+						//     val_ex
+						//
+						// Simple optimization based on pattern recognition for a shitload of different
+						// bytecode combinations of addition/subtraction
+						//
+						// If possible Addition/Subtraction is applied immediately and the value tokens
+						// are joined.
+						if (sz>=2 && m_vRPN[sz-1].Cmd == cmVAL_EX && m_vRPN[sz-2].Cmd == cmVAL_EX)
+						{
+						  if ( (m_vRPN[sz-1].Val.mul==0 && m_vRPN[sz-2].Val.mul==0) ||
+							   (m_vRPN[sz-1].Val.mul==0 && m_vRPN[sz-2].Val.mul!=0) ||
+							   (m_vRPN[sz-1].Val.mul!=0 && m_vRPN[sz-2].Val.mul==0) ||
+							   (m_vRPN[sz-1].Val.ptr==m_vRPN[sz-2].Val.ptr) )
+						  {
+							m_vRPN[sz-2].Val.ptr    = (m_vRPN[sz-1].Val.mul==0) ? m_vRPN[sz-2].Val.ptr : m_vRPN[sz-1].Val.ptr;
+							m_vRPN[sz-2].Val.fixed += ((tok.Ident==_SL("-")) ? -1 : 1) * m_vRPN[sz-1].Val.fixed;
+							m_vRPN[sz-2].Val.mul   += ((tok.Ident==_SL("-")) ? -1 : 1) * m_vRPN[sz-1].Val.mul;
 
-					RemoveTok();
+							RemoveTok();
 
-					if (m_vRPN.back().Val.mul==0)
-					  m_vRPN.back().ResetVariablePart();
+							if (m_vRPN.back().Val.mul==0)
+							  m_vRPN.back().ResetVariablePart();
 
-					return true;
-				  }
-				}
-
-				return false;
+							return true;
+						  }
+						}
 		*/
+
+		return false;
 	}
 
 	//-------------------------------------------------------------------------------------------
-	bool TryOptimizeMul(const token_type& /*tok*/)
+	bool TryOptimizeMul(const token_type& tok)
 	{
-		return false;
 		/*
 				std::size_t sz = m_vRPN.size();
-				if (sz<2 || m_vRPN[sz-1].Cmd != cmVAL_EX ||  m_vRPN[sz-2].Cmd != cmVAL_EX)
-				  return false;
+				if (sz < 2 || m_vRPN[sz - 1].Cmd != cmVAL_EX || m_vRPN[sz - 2].Cmd != cmVAL_EX)
+					return false;
 
 				// Value multiplied with a variable or vice versa
-				if (m_vRPN[sz-1].Val.mul==0 && m_vRPN[sz-2].Val.mul!=0)
+				if (m_vRPN[sz - 1].Val.mul == 0 && m_vRPN[sz - 2].Val.mul != 0)
 				{
-				  m_vRPN[sz-2].Cmd        = cmVAL_EX;
-				  m_vRPN[sz-2].Val.ptr    = m_vRPN[sz-2].Val.ptr;
-				  m_vRPN[sz-2].Val.mul   *= m_vRPN[sz-1].Val.fixed;
-				  m_vRPN[sz-2].Val.fixed *= m_vRPN[sz-1].Val.fixed;
-				  RemoveTok();
-				  return true;
+					m_vRPN[sz - 2].Cmd = cmVAL_EX;
+					m_vRPN[sz - 2].Val.ptr = m_vRPN[sz - 2].Val.ptr;
+					m_vRPN[sz - 2].Val.mul *= m_vRPN[sz - 1].Val.fixed;
+					m_vRPN[sz - 2].Val.fixed *= m_vRPN[sz - 1].Val.fixed;
+					RemoveTok();
+					return true;
 				}
-				else if (m_vRPN[sz-1].Val.mul!=0 && m_vRPN[sz-2].Val.mul==0)
+				else if (m_vRPN[sz - 1].Val.mul != 0 && m_vRPN[sz - 2].Val.mul == 0)
 				{
-				  m_vRPN[sz-2].Cmd       = cmVAL_EX;
-				  m_vRPN[sz-2].Val.ptr   = m_vRPN[sz-1].Val.ptr;
-				  m_vRPN[sz-2].Val.mul   = m_vRPN[sz-1].Val.mul   * m_vRPN[sz-2].Val.fixed;
-				  m_vRPN[sz-2].Val.fixed = m_vRPN[sz-1].Val.fixed * m_vRPN[sz-2].Val.fixed;
-				  RemoveTok();
-				  return true;
+					m_vRPN[sz - 2].Cmd = cmVAL_EX;
+					m_vRPN[sz - 2].Val.ptr = m_vRPN[sz - 1].Val.ptr;
+					m_vRPN[sz - 2].Val.mul = m_vRPN[sz - 1].Val.mul * m_vRPN[sz - 2].Val.fixed;
+					m_vRPN[sz - 2].Val.fixed = m_vRPN[sz - 1].Val.fixed * m_vRPN[sz - 2].Val.fixed;
+					RemoveTok();
+					return true;
 				}
-
-				return false;
 		*/
+		return false;
 	}
 
 	//-------------------------------------------------------------------------------------------
 	/** \brief Tries to replace calls to pow with low integer exponents with
 			   faster versions.
 	*/
-	bool TryOptimizePow(const token_type& /*tok*/)
+	bool TryOptimizePow(const token_type& tok)
 	{
+		std::size_t sz = m_vRPN.size();
+		if (sz < 2)
+			return false;
+
+		token_type& top = m_vRPN[sz - 1];
+		if (top.Cmd != cmVAL_EX)
+			return false;
+
+		token_type newTok(tok);
+		int nPow = (int)(top.Val.fixed);
+		if (nPow == top.Val.fixed && top.Val.fixed >= 2 && top.Val.fixed <= 5)
+		{
+			RemoveTok();
+			newTok.Cmd = cmFUNC;
+			newTok.Fun.argc = 1;
+
+			switch (nPow)
+			{
+			case 2:  newTok.Fun.ptr = FUN_P2; newTok.Ident = _SL("^2"); break;
+			case 3:  newTok.Fun.ptr = FUN_P3; newTok.Ident = _SL("^3"); break;
+			case 4:  newTok.Fun.ptr = FUN_P4; newTok.Ident = _SL("^4"); break;
+			case 5:  newTok.Fun.ptr = FUN_P5; newTok.Ident = _SL("^5"); break;
+			default: throw ParserError<TString>(ecINTERNAL_ERROR);
+			}
+
+			AddTok(newTok);
+			return true;
+		}
+
 		return false;
-		/*
-				std::size_t sz = m_vRPN.size();
-				if (sz<2)
-				  return false;
-
-				token_type &top = m_vRPN[sz-1];
-				if (top.Cmd != cmVAL_EX)
-				  return false;
-
-				token_type newTok(tok);
-				int nPow = (int)(top.Val.fixed);
-				if ( nPow==top.Val.fixed && top.Val.fixed>=2 && top.Val.fixed<=5)
-				{
-				  RemoveTok();
-				  newTok.Cmd = cmFUNC;
-				  newTok.Fun.argc = 1;
-
-				  switch(nPow)
-				  {
-				  case 2:  newTok.Fun.ptr = FUN_P2; newTok.Ident = _SL("^2"); break;
-				  case 3:  newTok.Fun.ptr = FUN_P3; newTok.Ident = _SL("^3"); break;
-				  case 4:  newTok.Fun.ptr = FUN_P4; newTok.Ident = _SL("^4"); break;
-				  case 5:  newTok.Fun.ptr = FUN_P5; newTok.Ident = _SL("^5"); break;
-				  default: throw ParserError<TString>(ecINTERNAL_ERROR);
-				  }
-
-				  AddTok(newTok);
-				  return true;
-				}
-
-				return false;
-		*/
 	}
 
 	//---------------------------------------------------------------------------
-	bool TryConstantFolding(const token_type& /*tok*/)
+	bool TryConstantFolding(const token_type& tok)
 	{
-		return false;
-		/*
-				std::size_t sz = m_vRPN.size();
-				if (sz<(std::size_t)tok.Fun.argc || tok.Fun.argc>=20)
-				  return false;
+		std::size_t sz = m_vRPN.size();
+		if (sz < (std::size_t)tok.Fun.argc || tok.Fun.argc >= 20)
+			return false;
 
-				if (tok.Fun.argc==0)
-				  return false;
+		if (tok.Fun.argc == 0)
+			return false;
 
-				TValue buf[20];
-				for (int i=0; i<tok.Fun.argc; ++i)
-				{
-				  const token_type &t = m_vRPN[sz - tok.Fun.argc + i];
+		TValue buf[20];
+		for (int i = 0; i < tok.Fun.argc; ++i)
+		{
+			const token_type& t = m_vRPN[sz - tok.Fun.argc + i];
 
-				  if (t.Cmd!=cmVAL_EX)
-					return false;
+			if (t.Cmd != cmVAL_EX)
+				return false;
 
-				  // If there is a variable component no optimization is possible,
-				  // else collect the constant value for function application
-				  if (t.Val.ptr==&ParserBase<TValue, TString>::g_NullValue)
-					return false;
-				  else
-					buf[i] = t.Val.fixed;
-				}
+			// If there is a variable component no optimization is possible,
+			// else collect the constant value for function application
+			if (t.Val.ptr != &ParserBase<TValue, TString>::g_NullValue)
+				return false;
+			else
+				buf[i] = t.Val.fixed;
+		}
 
-				// all parameters are constant, remove them from the stack and apply the function
-				m_vRPN.erase(m_vRPN.end() - tok.Fun.argc + 1, m_vRPN.end());
+		// all parameters are constant, remove them from the stack and apply the function
+		m_vRPN.erase(m_vRPN.end() - tok.Fun.argc + 1, m_vRPN.end());
 
-				token_type &result = m_vRPN.back();
-				result.ResetVariablePart();
-				(*(tok.Fun).ptr)(buf, tok.Fun.argc);
-				result.Val.fixed = buf[0];
-				m_iStackPos = result.StackPos;
-				return true;
-		*/
+		token_type& result = m_vRPN.back();
+		result.ResetVariablePart();
+		(*(tok.Fun).ptr)(buf, tok.Fun.argc);
+		result.Val.fixed = buf[0];
+		m_iStackPos = result.StackPos;
+
+		return true;
 	}
 
 	//---------------------------------------------------------------------------------------------
-	bool TrySubstitute(const TString& /*op1*/, const TString& /*op2*/, fun_type /*pFun*/, token_type& /*t1*/, token_type& /*t2*/)
+	bool TrySubstitute(const TString& op1, const TString& op2, fun_type pFun, token_type& t1, token_type& t2)
 	{
-		return false;
-		/*
-				if (t1.Ident==op1 && t2.Ident==op2)
-				{
-				  t2.Ident = op1 + op2;
-				  t2.Fun.ptr  = pFun;
-				  t2.Fun.argc = 3;
-				  return true;
-				}
+		if (t1.Ident == op1 && t2.Ident == op2)
+		{
+			t2.Ident = op1 + op2;
+			t2.Fun.ptr = pFun;
+			t2.Fun.argc = 3;
+			return true;
+		}
 
-				return false;
-		*/
+		return false;
 	}
 
 	//---------------------------------------------------------------------------------------------

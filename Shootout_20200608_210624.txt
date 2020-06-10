@@ -1,3 +1,0 @@
-Benchmark (Shootout for file "bench_expr_weird.txt")
-
-Expression 1 of 105: "sum(1?2,3:4)"; Progress: #

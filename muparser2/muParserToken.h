@@ -1,10 +1,12 @@
 /*
-				 __________
-	_____   __ __\______   \_____  _______  ______  ____ _______
-   /     \ |  |  \|     ___/\__  \ \_  __ \/  ___/_/ __ \\_  __ \
-  |  Y Y  \|  |  /|    |     / __ \_|  | \/\___ \ \  ___/ |  | \/
-  |__|_|  /|____/ |____|    (____  /|__|  /____  > \___  >|__|
-		\/                       \/            \/      \/
+
+	   _____  __ _____________ _______  ______ ___________
+	  /     \|  |  \____ \__  \\_  __ \/  ___// __ \_  __ \
+	 |  Y Y  \  |  /  |_> > __ \|  | \/\___ \\  ___/|  | \/
+	 |__|_|  /____/|   __(____  /__|  /____  >\___  >__|
+		   \/      |__|       \/           \/     \/
+
+
   Copyright (C) 2004 - 2020 Ingo Berg
 
 	Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -25,6 +27,7 @@
 	IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
 	OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
+
 
 #ifndef MU_PARSER_TOKEN_H
 #define MU_PARSER_TOKEN_H
@@ -314,7 +317,7 @@ namespace mu
 		//------------------------------------------------------------------------------
 		EOprtAssociativity GetAssociativity() const
 		{
-			if (m_pCallback.get() == NULL || m_pCallback->GetCode() != cmOPRT_BIN)
+			if (m_pCallback.get() == nullptr || m_pCallback->GetCode() != cmOPRT_BIN)
 				throw ParserError(ecINTERNAL_ERROR);
 
 			return m_pCallback->GetAssociativity();

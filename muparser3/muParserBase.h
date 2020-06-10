@@ -724,7 +724,7 @@ private:
 		const typename token_type::SValDef* pVal = nullptr;
 		const typename token_type::SFunDef* pFun = nullptr;
 
-		int sidx(0);
+		register int sidx(0);
 
 		for (const token_type* pTok = m_vRPN.GetBase(); pTok->Cmd != cmEND; ++pTok)
 		{

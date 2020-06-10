@@ -1,10 +1,12 @@
 /*
-				 __________
-	_____   __ __\______   \_____  _______  ______  ____ _______
-   /     \ |  |  \|     ___/\__  \ \_  __ \/  ___/_/ __ \\_  __ \
-  |  Y Y  \|  |  /|    |     / __ \_|  | \/\___ \ \  ___/ |  | \/
-  |__|_|  /|____/ |____|    (____  /|__|  /____  > \___  >|__|
-		\/                       \/            \/      \/
+
+	   _____  __ _____________ _______  ______ ___________
+	  /     \|  |  \____ \__  \\_  __ \/  ___// __ \_  __ \
+	 |  Y Y  \  |  /  |_> > __ \|  | \/\___ \\  ___/|  | \/
+	 |__|_|  /____/|   __(____  /__|  /____  >\___  >__|
+		   \/      |__|       \/           \/     \/
+
+
   Copyright (C) 2004 - 2020 Ingo Berg
 
 	Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -25,6 +27,7 @@
 	IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
 	OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
+
 #ifndef MUP_DEF_H
 #define MUP_DEF_H
 
@@ -40,7 +43,7 @@
 */
 
 #define MUP_VERSION _T("2.2.7 (Dev)")
-#define MUP_VERSION_DATE _T("20200602")
+#define MUP_VERSION_DATE _T("20200609")
 
 /** \brief Define the base datatype for values.
 
@@ -57,7 +60,7 @@
 
   use the cmake option instead!
 */
-#define MUP_USE_OPENMP
+//#define MUP_USE_OPENMP
 
 #if defined(_UNICODE)
 	/** \brief Definition of the basic parser string type. */
@@ -73,17 +76,6 @@
 
 	/** \brief Definition of the basic parser string type. */
 	#define MUP_STRING_TYPE std::string
-#endif
-
-#if defined(_DEBUG)
-	/** \brief Debug macro to force an abortion of the programm with a certain message. */
-	#define MUP_FAIL(MSG)		\
-			  {                 \
-				bool MSG=false; \
-				assert(MSG);    \
-			  }
-#else
-	#define MUP_FAIL(MSG)
 #endif
 
 /** \brief An assertion that does not kill the program. */
@@ -179,14 +171,14 @@ namespace mu
 		cmVAL = 21,			///< value item
 
 		// For optimization purposes
-		cmVARPOW2,
-		cmVARPOW3,
-		cmVARPOW4,
-		cmVARMUL,
-		cmPOW2,
+		cmVARPOW2 = 22,
+		cmVARPOW3 = 23,
+		cmVARPOW4 = 24,
+		cmVARMUL = 25,
+		cmPOW2 = 26,
 
 		// operators and functions
-		cmFUNC,				///< Code for a generic function item
+		cmFUNC = 27,		///< Code for a generic function item
 		cmFUNC_STR,			///< Code for a function with a string parameter
 		cmFUNC_BULK,		///< Special callbacks for Bulk mode with an additional parameter for the bulk index 
 		cmSTRING,			///< Code for a string token

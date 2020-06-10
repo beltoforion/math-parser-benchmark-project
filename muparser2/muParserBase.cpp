@@ -1,10 +1,12 @@
 /*
-				 __________
-	_____   __ __\______   \_____  _______  ______  ____ _______
-   /     \ |  |  \|     ___/\__  \ \_  __ \/  ___/_/ __ \\_  __ \
-  |  Y Y  \|  |  /|    |     / __ \_|  | \/\___ \ \  ___/ |  | \/
-  |__|_|  /|____/ |____|    (____  /|__|  /____  > \___  >|__|
-		\/                       \/            \/      \/
+
+	   _____  __ _____________ _______  ______ ___________
+	  /     \|  |  \____ \__  \\_  __ \/  ___// __ \_  __ \
+	 |  Y Y  \  |  /  |_> > __ \|  | \/\___ \\  ___/|  | \/
+	 |__|_|  /____/|   __(____  /__|  /____  >\___  >__|
+		   \/      |__|       \/           \/     \/
+
+
   Copyright (C) 2004 - 2020 Ingo Berg
 
 	Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -25,6 +27,7 @@
 	IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
 	OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
+
 
 #include "muParserBase.h"
 #include "muParserTemplateMagic.h"
@@ -77,7 +80,7 @@ namespace mu
 	//------------------------------------------------------------------------------
 	/** \brief Constructor.
 		\param a_szFormula the formula to interpret.
-		\throw ParserException if a_szFormula is null.
+		\throw ParserException if a_szFormula is nullptr.
 	*/
 	ParserBase::ParserBase()
 		:m_pParseFormula(&ParserBase::ParseString)
@@ -95,7 +98,6 @@ namespace mu
 		, m_sNameChars()
 		, m_sOprtChars()
 		, m_sInfixOprtChars()
-		, m_nIfElseCounter(0)
 		, m_vStackBuffer()
 		, m_nFinalResultIdx(0)
 	{
@@ -124,7 +126,6 @@ namespace mu
 		, m_sNameChars()
 		, m_sOprtChars()
 		, m_sInfixOprtChars()
-		, m_nIfElseCounter(0)
 	{
 		m_pTokenReader.reset(new token_reader_type(this));
 		Assign(a_Parser);
@@ -174,7 +175,6 @@ namespace mu
 		m_nFinalResultIdx = a_Parser.m_nFinalResultIdx;
 		m_StrVarDef = a_Parser.m_StrVarDef;
 		m_vStringVarBuf = a_Parser.m_vStringVarBuf;
-		m_nIfElseCounter = a_Parser.m_nIfElseCounter;
 		m_pTokenReader.reset(a_Parser.m_pTokenReader->Clone(this));
 
 		// Copy function and operator callbacks
@@ -254,7 +254,6 @@ namespace mu
 		m_vStringBuf.clear();
 		m_vRPN.clear();
 		m_pTokenReader->ReInit();
-		m_nIfElseCounter = 0;
 	}
 
 	//---------------------------------------------------------------------------
@@ -406,13 +405,18 @@ namespace mu
 	*/
 	void ParserBase::SetExpr(const string_type& a_sExpr)
 	{
+		if (std::all_of(a_sExpr.begin(), a_sExpr.end(), [](char c) { return !std::isgraph(c); }))
+		{
+			Error(ecINVALID_CHARACTERS_FOUND);
+		}
+
 		// Check locale compatibility
 		if (m_pTokenReader->GetArgSep() == std::use_facet<numpunct<char_type> >(s_locale).decimal_point())
 			Error(ecLOCALE);
 
 		// Check maximum allowed expression length. An arbitrary value small enough so i can debug expressions sent to me
 		if (a_sExpr.length() >= ParserSetup::MaxLenExpression)
-			Error(ecExpressionTooLong, 0, a_sExpr);
+			Error(ecEXPRESSION_TOO_LONG, 0, a_sExpr);
 
 		m_pTokenReader->SetFormula(a_sExpr + _T(" "));
 		ReInit();
@@ -491,7 +495,7 @@ namespace mu
 	void ParserBase::DefinePostfixOprt(const string_type& a_sName, fun_type1 a_pFun, bool a_bAllowOpt)
 	{
 		if (a_sName.length() > ParserSetup::MaxLenIdentifier)
-			Error(ecIdentifierTooLong);
+			Error(ecIDENTIFIER_TOO_LONG);
 
 		AddCallback(a_sName, ParserCallback(a_pFun, a_bAllowOpt, prPOSTFIX, cmOPRT_POSTFIX), m_PostOprtDef, ValidOprtChars());
 	}
@@ -518,10 +522,10 @@ namespace mu
 		\param [in] a_bAllowOpt  True if operator is volatile (default=false)
 		\sa EPrec
 	*/
-	void ParserBase::DefineInfixOprt(const string_type& a_sName, fun_type1 a_pFun, int a_iPrec,	bool a_bAllowOpt)
+	void ParserBase::DefineInfixOprt(const string_type& a_sName, fun_type1 a_pFun, int a_iPrec, bool a_bAllowOpt)
 	{
 		if (a_sName.length() > ParserSetup::MaxLenIdentifier)
-			Error(ecIdentifierTooLong);
+			Error(ecIDENTIFIER_TOO_LONG);
 
 		AddCallback(a_sName, ParserCallback(a_pFun, a_bAllowOpt, a_iPrec, cmOPRT_INFIX), m_InfixOprtDef, ValidInfixOprtChars());
 	}
@@ -537,10 +541,10 @@ namespace mu
 
 		Adds a new Binary operator the the parser instance.
 	*/
-	void ParserBase::DefineOprt(const string_type& a_sName,	fun_type2 a_pFun, unsigned a_iPrec,	EOprtAssociativity a_eAssociativity, bool a_bAllowOpt)
+	void ParserBase::DefineOprt(const string_type& a_sName, fun_type2 a_pFun, unsigned a_iPrec, EOprtAssociativity a_eAssociativity, bool a_bAllowOpt)
 	{
 		if (a_sName.length() > ParserSetup::MaxLenIdentifier)
-			Error(ecIdentifierTooLong);
+			Error(ecIDENTIFIER_TOO_LONG);
 
 		// Check for conflicts with built in operator names
 		for (int i = 0; m_bBuiltInOp && i < cmENDIF; ++i)
@@ -551,7 +555,7 @@ namespace mu
 			}
 		}
 
-		AddCallback(a_sName, ParserCallback(a_pFun, a_bAllowOpt, a_iPrec, a_eAssociativity), m_OprtDef,	ValidOprtChars());
+		AddCallback(a_sName, ParserCallback(a_pFun, a_bAllowOpt, a_iPrec, a_eAssociativity), m_OprtDef, ValidOprtChars());
 	}
 
 	//---------------------------------------------------------------------------
@@ -578,7 +582,7 @@ namespace mu
 		\param [in] a_sName the variable name
 		\param [in] a_pVar A pointer to the variable value.
 		\post Will reset the Parser to string parsing mode.
-		\throw ParserException in case the name contains invalid signs or a_pVar is NULL.
+		\throw ParserException in case the name contains invalid signs or a_pVar is nullptr.
 	*/
 	void ParserBase::DefineVar(const string_type& a_sName, value_type* a_pVar)
 	{
@@ -586,7 +590,7 @@ namespace mu
 			Error(ecINVALID_VAR_PTR);
 
 		if (a_sName.length() > ParserSetup::MaxLenIdentifier)
-			Error(ecIdentifierTooLong);
+			Error(ecIDENTIFIER_TOO_LONG);
 
 		// Test if a constant with that names already exists
 		if (m_ConstDef.find(a_sName) != m_ConstDef.end())
@@ -607,7 +611,7 @@ namespace mu
 	void ParserBase::DefineConst(const string_type& a_sName, value_type a_fVal)
 	{
 		if (a_sName.length() > ParserSetup::MaxLenIdentifier)
-			Error(ecIdentifierTooLong);
+			Error(ecIDENTIFIER_TOO_LONG);
 
 		CheckName(a_sName, ValidNameChars());
 		m_ConstDef[a_sName] = a_fVal;
@@ -785,7 +789,7 @@ namespace mu
 		\post The function token is removed from the stack
 		\throw exception_type if Argument count does not match function requirements.
 	*/
-	void ParserBase::ApplyFunc(ParserStack<token_type>& a_stOpt, ParserStack<token_type>& a_stVal, int a_iArgCount) const
+	void ParserBase::ApplyFunc(std::stack<token_type>& a_stOpt, std::stack<token_type>& a_stVal, int a_iArgCount) const
 	{
 		assert(m_pTokenReader.get());
 
@@ -793,8 +797,9 @@ namespace mu
 		if (a_stOpt.empty() || a_stOpt.top().GetFuncAddr() == 0)
 			return;
 
-		token_type funTok = a_stOpt.pop();
-		assert(funTok.GetFuncAddr());
+		token_type funTok = a_stOpt.top();
+		a_stOpt.pop();
+		MUP_ASSERT(funTok.GetFuncAddr() != nullptr);
 
 		// Binary operators must rely on their internal operator number
 		// since counting of operators relies on commas for function arguments
@@ -828,7 +833,9 @@ namespace mu
 			if (a_stVal.empty())
 				Error(ecINTERNAL_ERROR, m_pTokenReader->GetPos(), funTok.GetAsString());
 
-			stArg.push_back(a_stVal.pop());
+			stArg.push_back(a_stVal.top());
+			a_stVal.pop();
+
 			if (stArg.back().GetType() == tpSTR && funTok.GetType() != tpSTR)
 				Error(ecVAL_EXPECTED, m_pTokenReader->GetPos(), funTok.GetAsString());
 		}
@@ -839,7 +846,8 @@ namespace mu
 			if (a_stVal.empty())
 				Error(ecINTERNAL_ERROR, m_pTokenReader->GetPos(), funTok.GetAsString());
 
-			stArg.push_back(a_stVal.pop());
+			stArg.push_back(a_stVal.top());
+			a_stVal.pop();
 
 			if (stArg.back().GetType() == tpSTR && funTok.GetType() != tpSTR)
 				Error(ecVAL_EXPECTED, m_pTokenReader->GetPos(), funTok.GetAsString());
@@ -871,26 +879,35 @@ namespace mu
 	}
 
 	//---------------------------------------------------------------------------
-	void ParserBase::ApplyIfElse(ParserStack<token_type>& a_stOpt, ParserStack<token_type>& a_stVal) const
+	void ParserBase::ApplyIfElse(std::stack<token_type>& a_stOpt, std::stack<token_type>& a_stVal) const
 	{
 		// Check if there is an if Else clause to be calculated
 		while (a_stOpt.size() && a_stOpt.top().GetCode() == cmELSE)
 		{
-			token_type opElse = a_stOpt.pop();
 			MUP_ASSERT(!a_stOpt.empty())
+				token_type opElse = a_stOpt.top();
+			a_stOpt.pop();
 
 			// Take the value associated with the else branch from the value stack
-			token_type vVal2 = a_stVal.pop();
-			MUP_ASSERT(a_stVal.size() >= 2);
+			MUP_ASSERT(!a_stVal.empty());
+			token_type vVal2 = a_stVal.top();
+			a_stVal.pop();
 
 			// it then else is a ternary operator Pop all three values from the value s
 			// tack and just return the right value
-			token_type vVal1 = a_stVal.pop();
-			token_type vExpr = a_stVal.pop();
+			MUP_ASSERT(!a_stVal.empty());
+			token_type vVal1 = a_stVal.top();
+			a_stVal.pop();
+
+			MUP_ASSERT(!a_stVal.empty());
+			token_type vExpr = a_stVal.top();
+			a_stVal.pop();
 
 			a_stVal.push((vExpr.GetVal() != 0) ? vVal1 : vVal2);
 
-			token_type opIf = a_stOpt.pop();
+			token_type opIf = a_stOpt.top();
+			a_stOpt.pop();
+
 			MUP_ASSERT(opElse.GetCode() == cmELSE);
 
 			if (opIf.GetCode() != cmIF)
@@ -904,7 +921,7 @@ namespace mu
 	/** \brief Performs the necessary steps to write code for
 			   the execution of binary operators into the bytecode.
 	*/
-	void ParserBase::ApplyBinOprt(ParserStack<token_type>& a_stOpt, ParserStack<token_type>& a_stVal) const
+	void ParserBase::ApplyBinOprt(std::stack<token_type>& a_stOpt, std::stack<token_type>& a_stVal) const
 	{
 		// is it a user defined binary operator?
 		if (a_stOpt.top().GetCode() == cmOPRT_BIN)
@@ -916,9 +933,15 @@ namespace mu
 			if (a_stVal.size() < 2)
 				Error(ecINTERNAL_ERROR, m_pTokenReader->GetPos(), _T("ApplyBinOprt: not enough values in value stack!"));
 
-			token_type valTok1 = a_stVal.pop();
-			token_type valTok2 = a_stVal.pop();
-			token_type optTok = a_stOpt.pop();
+			token_type valTok1 = a_stVal.top();
+			a_stVal.pop();
+
+			token_type valTok2 = a_stVal.top();
+			a_stVal.pop();
+
+			token_type optTok = a_stOpt.top();
+			a_stOpt.pop();
+
 			token_type resTok;
 
 			if (valTok1.GetType() != valTok2.GetType() ||
@@ -945,11 +968,11 @@ namespace mu
 		\param a_stOpt The operator stack
 		\param a_stVal The value stack
 	*/
-	void ParserBase::ApplyRemainingOprt(ParserStack<token_type>& stOpt, ParserStack<token_type>& stVal) const
+	void ParserBase::ApplyRemainingOprt(std::stack<token_type>& stOpt, std::stack<token_type>& stVal) const
 	{
-		while (	stOpt.size() && 
-				stOpt.top().GetCode() != cmBO && 
-				stOpt.top().GetCode() != cmIF)
+		while (stOpt.size() &&
+			stOpt.top().GetCode() != cmBO &&
+			stOpt.top().GetCode() != cmIF)
 		{
 			token_type tok = stOpt.top();
 			switch (tok.GetCode())
@@ -1017,7 +1040,7 @@ namespace mu
 		{
 			switch (pTok->Cmd)
 			{
-				// built in binary operators
+			// built in binary operators
 			case  cmLE:   --sidx; Stack[sidx] = Stack[sidx] <= Stack[sidx + 1]; continue;
 			case  cmGE:   --sidx; Stack[sidx] = Stack[sidx] >= Stack[sidx + 1]; continue;
 			case  cmNEQ:  --sidx; Stack[sidx] = Stack[sidx] != Stack[sidx + 1]; continue;
@@ -1058,10 +1081,6 @@ namespace mu
 			case  cmENDIF:
 				continue;
 
-				//case  cmARG_SEP:
-				//      MUP_FAIL(INVALID_CODE_IN_BYTECODE);
-				//      continue;
-
 				// value and variable tokens
 			case  cmVAR:    Stack[++sidx] = *(pTok->Val.ptr + nOffset);  continue;
 			case  cmVAL:    Stack[++sidx] = pTok->Val.data2;  continue;
@@ -1078,7 +1097,8 @@ namespace mu
 				Stack[++sidx] = buf * buf * buf * buf;
 				continue;
 
-			case  cmVARMUL:  Stack[++sidx] = *(pTok->Val.ptr + nOffset) * pTok->Val.data + pTok->Val.data2;
+			case  cmVARMUL:  
+				Stack[++sidx] = *(pTok->Val.ptr + nOffset) * pTok->Val.data + pTok->Val.data2;
 				continue;
 
 				// Next is treatment of numeric functions
@@ -1101,10 +1121,17 @@ namespace mu
 				case 9: sidx -= 8; Stack[sidx] = (*(fun_type9)pTok->Fun.ptr)(Stack[sidx], Stack[sidx + 1], Stack[sidx + 2], Stack[sidx + 3], Stack[sidx + 4], Stack[sidx + 5], Stack[sidx + 6], Stack[sidx + 7], Stack[sidx + 8]); continue;
 				case 10:sidx -= 9; Stack[sidx] = (*(fun_type10)pTok->Fun.ptr)(Stack[sidx], Stack[sidx + 1], Stack[sidx + 2], Stack[sidx + 3], Stack[sidx + 4], Stack[sidx + 5], Stack[sidx + 6], Stack[sidx + 7], Stack[sidx + 8], Stack[sidx + 9]); continue;
 				default:
-					if (iArgCount > 0) // function with variable arguments store the number as a negative value
-						Error(ecINTERNAL_ERROR, 1);
+					// function with variable arguments store the number as a negative value
+					if (iArgCount > 0)
+						Error(ecINTERNAL_ERROR, -1);
 
 					sidx -= -iArgCount - 1;
+
+					// <ibg 2020-06-08/> From oss-fuzz. Happend when Multiarg functions and if-then-else are used incorrectly "sum(0?1,2,3,4,5:6)"
+					// The final result normally lieas at position 1. If sixd is smaller there is something wrong.
+					if (sidx <= 0)
+						Error(ecINTERNAL_ERROR, -1);
+
 					Stack[sidx] = (*(multfun_type)pTok->Fun.ptr)(&Stack[sidx], -iArgCount);
 					continue;
 				}
@@ -1171,10 +1198,11 @@ namespace mu
 		if (!m_pTokenReader->GetExpr().length())
 			Error(ecUNEXPECTED_EOF, 0);
 
-		ParserStack<token_type> stOpt, stVal;
-		ParserStack<int> stArgCount;
+		std::stack<token_type> stOpt, stVal;
+		std::stack<int> stArgCount;
 		token_type opta, opt;  // for storing operators
 		token_type val, tval;  // for storing value
+		int ifElseCounter = 0;
 
 		ReInit();
 
@@ -1188,10 +1216,13 @@ namespace mu
 
 			switch (opt.GetCode())
 			{
-				//
-				// Next three are different kind of value entries
-				//
+			//
+			// Next three are different kind of value entries
+			//
 			case cmSTRING:
+				if (stOpt.empty())
+					Error(ecSTR_RESULT, m_pTokenReader->GetPos(), opt.GetAsString());
+
 				opt.SetIdx((int)m_vStringBuf.size());      // Assign buffer index to token 
 				stVal.push(opt);
 				m_vStringBuf.push_back(opt.GetAsString()); // Store string in internal buffer
@@ -1208,8 +1239,16 @@ namespace mu
 				break;
 
 			case cmELSE:
-				m_nIfElseCounter--;
-				if (m_nIfElseCounter < 0)
+				if (stArgCount.empty())
+					Error(ecMISPLACED_COLON, m_pTokenReader->GetPos());
+
+				if (stArgCount.top() > 1)
+					Error(ecUNEXPECTED_ARG_SEP, m_pTokenReader->GetPos());
+
+				stArgCount.pop();
+
+				ifElseCounter--;
+				if (ifElseCounter < 0)
 					Error(ecMISPLACED_COLON, m_pTokenReader->GetPos());
 
 				ApplyRemainingOprt(stOpt, stVal);
@@ -1217,8 +1256,10 @@ namespace mu
 				stOpt.push(opt);
 				break;
 
-
 			case cmARG_SEP:
+				if (!stOpt.empty() && stOpt.top().GetCode() == cmIF)
+					Error(ecUNEXPECTED_ARG_SEP, m_pTokenReader->GetPos());
+
 				if (stArgCount.empty())
 					Error(ecUNEXPECTED_ARG_SEP, m_pTokenReader->GetPos());
 
@@ -1250,8 +1291,9 @@ namespace mu
 					// the operator stack
 					// Check if a function is standing in front of the opening bracket, 
 					// if yes evaluate it afterwards check for infix operators
-					assert(stArgCount.size());
-					int iArgCount = stArgCount.pop();
+					MUP_ASSERT(stArgCount.size());
+					int iArgCount = stArgCount.top();
+					stArgCount.pop();
 
 					stOpt.pop(); // Take opening bracket from stack
 
@@ -1278,7 +1320,8 @@ namespace mu
 			// Next are the binary operator entries
 			//
 			case cmIF:
-				m_nIfElseCounter++;
+				ifElseCounter++;
+				stArgCount.push(1);
 				// Falls through.
 				// intentional (no break!)
 
@@ -1299,7 +1342,8 @@ namespace mu
 			case cmOPRT_BIN:
 
 				// A binary operator (user defined or built in) has been found. 
-				while (stOpt.size() &&
+				while (
+					stOpt.size() &&
 					stOpt.top().GetCode() != cmBO &&
 					stOpt.top().GetCode() != cmELSE &&
 					stOpt.top().GetCode() != cmIF)
@@ -1378,7 +1422,7 @@ namespace mu
 		if (ParserBase::g_DbgDumpCmdCode)
 			m_vRPN.AsciiDump();
 
-		if (m_nIfElseCounter > 0)
+		if (ifElseCounter > 0)
 			Error(ecMISSING_ELSE_CLAUSE);
 
 		// get the last value (= final result) from the stack
@@ -1594,16 +1638,17 @@ namespace mu
 
 		This function is used for debugging only.
 	*/
-	void ParserBase::StackDump(const ParserStack<token_type>& a_stVal,
-		const ParserStack<token_type>& a_stOprt) const
+	void ParserBase::StackDump(const std::stack<token_type>& a_stVal, const std::stack<token_type>& a_stOprt) const
 	{
-		ParserStack<token_type> stOprt(a_stOprt),
-			stVal(a_stVal);
+		std::stack<token_type> stOprt(a_stOprt);
+		std::stack<token_type> stVal(a_stVal);
 
 		mu::console() << _T("\nValue stack:\n");
 		while (!stVal.empty())
 		{
-			token_type val = stVal.pop();
+			token_type val = stVal.top();
+			stVal.pop();
+
 			if (val.GetType() == tpSTR)
 				mu::console() << _T(" \"") << val.GetAsString() << _T("\" ");
 			else
@@ -1625,18 +1670,32 @@ namespace mu
 				{
 				case cmVAR:   mu::console() << _T("VAR\n");  break;
 				case cmVAL:   mu::console() << _T("VAL\n");  break;
-				case cmFUNC:  mu::console() << _T("FUNC \"")
-					<< stOprt.top().GetAsString()
-					<< _T("\"\n");   break;
-				case cmFUNC_BULK:  mu::console() << _T("FUNC_BULK \"")
-					<< stOprt.top().GetAsString()
-					<< _T("\"\n");   break;
-				case cmOPRT_INFIX: mu::console() << _T("OPRT_INFIX \"")
-					<< stOprt.top().GetAsString()
-					<< _T("\"\n");      break;
-				case cmOPRT_BIN:   mu::console() << _T("OPRT_BIN \"")
-					<< stOprt.top().GetAsString()
-					<< _T("\"\n");           break;
+				case cmFUNC:
+					mu::console()
+						<< _T("FUNC \"")
+						<< stOprt.top().GetAsString()
+						<< _T("\"\n");
+					break;
+
+				case cmFUNC_BULK:
+					mu::console()
+						<< _T("FUNC_BULK \"")
+						<< stOprt.top().GetAsString()
+						<< _T("\"\n");
+					break;
+
+				case cmOPRT_INFIX:
+					mu::console() << _T("OPRT_INFIX \"")
+						<< stOprt.top().GetAsString()
+						<< _T("\"\n");
+					break;
+
+				case cmOPRT_BIN:
+					mu::console() << _T("OPRT_BIN \"")
+						<< stOprt.top().GetAsString()
+						<< _T("\"\n");
+					break;
+
 				case cmFUNC_STR: mu::console() << _T("FUNC_STR\n");       break;
 				case cmEND:      mu::console() << _T("END\n");            break;
 				case cmUNKNOWN:  mu::console() << _T("UNKNOWN\n");        break;
@@ -1713,10 +1772,10 @@ namespace mu
 
 #ifdef MUP_USE_OPENMP
 		//#define DEBUG_OMP_STUFF
-		#ifdef DEBUG_OMP_STUFF
+#ifdef DEBUG_OMP_STUFF
 		int* pThread = new int[nBulkSize];
 		int* pIdx = new int[nBulkSize];
-		#endif
+#endif
 
 		int nMaxThreads = std::min(omp_get_max_threads(), s_MaxNumOpenMPThreads);
 		int nThreadID = 0, ct = 0;
