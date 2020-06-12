@@ -127,24 +127,6 @@
     <ClCompile Include=".\muparserx\mpVariable.cpp">
       <Filter>muparserx</Filter>
     </ClCompile>
-    <ClCompile Include=".\muparser2\muParser.cpp">
-      <Filter>muparser2</Filter>
-    </ClCompile>
-    <ClCompile Include=".\muparser2\muParserBase.cpp">
-      <Filter>muparser2</Filter>
-    </ClCompile>
-    <ClCompile Include=".\muparser2\muParserBytecode.cpp">
-      <Filter>muparser2</Filter>
-    </ClCompile>
-    <ClCompile Include=".\muparser2\muParserCallback.cpp">
-      <Filter>muparser2</Filter>
-    </ClCompile>
-    <ClCompile Include=".\muparser2\muParserError.cpp">
-      <Filter>muparser2</Filter>
-    </ClCompile>
-    <ClCompile Include=".\muparser2\muParserTokenReader.cpp">
-      <Filter>muparser2</Filter>
-    </ClCompile>
     <ClCompile Include=".\libcpuid\recog_intel.c">
       <Filter>libcpuid</Filter>
     </ClCompile>
@@ -160,7 +142,6 @@
     <ClCompile Include=".\src\BenchFParser.cpp" />
     <ClCompile Include=".\src\Benchmark.cpp" />
     <ClCompile Include=".\src\BenchMathExpr.cpp" />
-    <ClCompile Include=".\src\BenchMuParser2.cpp" />
     <ClCompile Include=".\src\BenchMuParserX.cpp" />
     <ClCompile Include=".\src\FormelGenerator.cpp" />
     <ClCompile Include=".\src\ParserBench.cpp" />
@@ -174,6 +155,53 @@
     <ClCompile Include=".\src\BenchTinyExpr.cpp" />
     <ClCompile Include=".\src\BenchMETL.cpp" />
     <ClCompile Include="BenchMuParser3.cpp" />
+    <ClCompile Include="src\BenchMuParser226.cpp" />
+    <ClCompile Include="muparser230\muParserError.cpp">
+      <Filter>muparser230</Filter>
+    </ClCompile>
+    <ClCompile Include="muparser230\muParserTokenReader.cpp">
+      <Filter>muparser230</Filter>
+    </ClCompile>
+    <ClCompile Include="muparser230\muParser.cpp">
+      <Filter>muparser230</Filter>
+    </ClCompile>
+    <ClCompile Include="muparser230\muParserBase.cpp">
+      <Filter>muparser230</Filter>
+    </ClCompile>
+    <ClCompile Include="muparser230\muParserBytecode.cpp">
+      <Filter>muparser230</Filter>
+    </ClCompile>
+    <ClCompile Include="muparser230\muParserCallback.cpp">
+      <Filter>muparser230</Filter>
+    </ClCompile>
+    <ClCompile Include="muparser226\muParserError.cpp">
+      <Filter>muparser226</Filter>
+    </ClCompile>
+    <ClCompile Include="muparser226\muParserInt.cpp">
+      <Filter>muparser226</Filter>
+    </ClCompile>
+    <ClCompile Include="muparser226\muParserTest.cpp">
+      <Filter>muparser226</Filter>
+    </ClCompile>
+    <ClCompile Include="muparser226\muParserTokenReader.cpp">
+      <Filter>muparser226</Filter>
+    </ClCompile>
+    <ClCompile Include="muparser226\muParser.cpp">
+      <Filter>muparser226</Filter>
+    </ClCompile>
+    <ClCompile Include="muparser226\muParserBase.cpp">
+      <Filter>muparser226</Filter>
+    </ClCompile>
+    <ClCompile Include="muparser226\muParserBytecode.cpp">
+      <Filter>muparser226</Filter>
+    </ClCompile>
+    <ClCompile Include="muparser226\muParserCallback.cpp">
+      <Filter>muparser226</Filter>
+    </ClCompile>
+    <ClCompile Include="muparser226\muParserDLL.cpp">
+      <Filter>muparser226</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BenchMuParser230.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include=".\exprtk\exprtk.hpp">
@@ -329,39 +357,6 @@
     <ClInclude Include=".\muparserx\mpValueCache.h">
       <Filter>muparserx</Filter>
     </ClInclude>
-    <ClInclude Include=".\muparser2\muParserTokenReader.h">
-      <Filter>muparser2</Filter>
-    </ClInclude>
-    <ClInclude Include=".\muparser2\muParser.h">
-      <Filter>muparser2</Filter>
-    </ClInclude>
-    <ClInclude Include=".\muparser2\muParserBase.h">
-      <Filter>muparser2</Filter>
-    </ClInclude>
-    <ClInclude Include=".\muparser2\muParserBytecode.h">
-      <Filter>muparser2</Filter>
-    </ClInclude>
-    <ClInclude Include=".\muparser2\muParserCallback.h">
-      <Filter>muparser2</Filter>
-    </ClInclude>
-    <ClInclude Include=".\muparser2\muParserDef.h">
-      <Filter>muparser2</Filter>
-    </ClInclude>
-    <ClInclude Include=".\muparser2\muParserError.h">
-      <Filter>muparser2</Filter>
-    </ClInclude>
-    <ClInclude Include=".\muparser2\muParserFixes.h">
-      <Filter>muparser2</Filter>
-    </ClInclude>
-    <ClInclude Include=".\muparser2\muParserStack.h">
-      <Filter>muparser2</Filter>
-    </ClInclude>
-    <ClInclude Include=".\muparser2\muParserTemplateMagic.h">
-      <Filter>muparser2</Filter>
-    </ClInclude>
-    <ClInclude Include=".\muparser2\muParserToken.h">
-      <Filter>muparser2</Filter>
-    </ClInclude>
     <ClInclude Include=".\libcpuid\recog_intel.h">
       <Filter>libcpuid</Filter>
     </ClInclude>
@@ -423,9 +418,6 @@
       <Filter>headers</Filter>
     </ClInclude>
     <ClInclude Include=".\include\BenchMTParser.h">
-      <Filter>headers</Filter>
-    </ClInclude>
-    <ClInclude Include=".\include\BenchMuParser2.h">
       <Filter>headers</Filter>
     </ClInclude>
     <ClInclude Include=".\include\BenchMuParserSSE.h">
@@ -551,6 +543,81 @@
     <ClInclude Include="BenchMuParser3.h">
       <Filter>headers</Filter>
     </ClInclude>
+    <ClInclude Include="include\BenchMuParser226.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="muparser230\muParserError.h">
+      <Filter>muparser230</Filter>
+    </ClInclude>
+    <ClInclude Include="muparser230\muParserFixes.h">
+      <Filter>muparser230</Filter>
+    </ClInclude>
+    <ClInclude Include="muparser230\muParserTemplateMagic.h">
+      <Filter>muparser230</Filter>
+    </ClInclude>
+    <ClInclude Include="muparser230\muParserToken.h">
+      <Filter>muparser230</Filter>
+    </ClInclude>
+    <ClInclude Include="muparser230\muParserTokenReader.h">
+      <Filter>muparser230</Filter>
+    </ClInclude>
+    <ClInclude Include="muparser230\muParser.h">
+      <Filter>muparser230</Filter>
+    </ClInclude>
+    <ClInclude Include="muparser230\muParserBase.h">
+      <Filter>muparser230</Filter>
+    </ClInclude>
+    <ClInclude Include="muparser230\muParserBytecode.h">
+      <Filter>muparser230</Filter>
+    </ClInclude>
+    <ClInclude Include="muparser230\muParserCallback.h">
+      <Filter>muparser230</Filter>
+    </ClInclude>
+    <ClInclude Include="muparser230\muParserDef.h">
+      <Filter>muparser230</Filter>
+    </ClInclude>
+    <ClInclude Include="muparser226\muParserError.h">
+      <Filter>muparser226</Filter>
+    </ClInclude>
+    <ClInclude Include="muparser226\muParserFixes.h">
+      <Filter>muparser226</Filter>
+    </ClInclude>
+    <ClInclude Include="muparser226\muParserInt.h">
+      <Filter>muparser226</Filter>
+    </ClInclude>
+    <ClInclude Include="muparser226\muParserTemplateMagic.h">
+      <Filter>muparser226</Filter>
+    </ClInclude>
+    <ClInclude Include="muparser226\muParserTest.h">
+      <Filter>muparser226</Filter>
+    </ClInclude>
+    <ClInclude Include="muparser226\muParserToken.h">
+      <Filter>muparser226</Filter>
+    </ClInclude>
+    <ClInclude Include="muparser226\muParserTokenReader.h">
+      <Filter>muparser226</Filter>
+    </ClInclude>
+    <ClInclude Include="muparser226\muParser.h">
+      <Filter>muparser226</Filter>
+    </ClInclude>
+    <ClInclude Include="muparser226\muParserBase.h">
+      <Filter>muparser226</Filter>
+    </ClInclude>
+    <ClInclude Include="muparser226\muParserBytecode.h">
+      <Filter>muparser226</Filter>
+    </ClInclude>
+    <ClInclude Include="muparser226\muParserCallback.h">
+      <Filter>muparser226</Filter>
+    </ClInclude>
+    <ClInclude Include="muparser226\muParserDef.h">
+      <Filter>muparser226</Filter>
+    </ClInclude>
+    <ClInclude Include="muparser226\muParserDLL.h">
+      <Filter>muparser226</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BenchMuParser230.h">
+      <Filter>headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\fparser\fparser.hh" />
@@ -577,9 +644,6 @@
     <Filter Include="mathexpr">
       <UniqueIdentifier>{208371d7-843d-4242-932e-e69219f74637}</UniqueIdentifier>
     </Filter>
-    <Filter Include="muparser2">
-      <UniqueIdentifier>{087dd1b5-eba9-49b9-9c03-ba91dcda4f46}</UniqueIdentifier>
-    </Filter>
     <Filter Include="mpfr">
       <UniqueIdentifier>{7d03bb0e-8cbc-4f3f-8619-2050f99cd007}</UniqueIdentifier>
     </Filter>
@@ -591,6 +655,12 @@
     </Filter>
     <Filter Include="muparser3">
       <UniqueIdentifier>{073ec0a1-8a2f-4e7b-8c27-50a5c56ff04a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="muparser226">
+      <UniqueIdentifier>{087dd1b5-eba9-49b9-9c03-ba91dcda4f46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="muparser230">
+      <UniqueIdentifier>{21ff6a46-c340-48b1-b942-ee26742f5f67}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

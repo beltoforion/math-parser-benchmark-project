@@ -23,7 +23,8 @@
 #include "cpuid.h"
 #include "Benchmark.h"
 #include "BenchMuParserX.h"
-#include "BenchMuParser2.h"
+#include "BenchMuParser226.h"
+#include "BenchMuParser230.h"
 #include "BenchMuParser3.h"
 #include "BenchATMSP.h"
 #include "BenchExprTk.h"
@@ -383,13 +384,12 @@ int main(int argc, const char* argv[])
 	pthread_setschedparam(pthread_self(), policy, &param);
 #endif
 
-	int iCount = 1000000;
+	int iCount = 200000;
 
 	bool writeResultTable = false;
 
 	const std::string benchmark_file_set[] =
 	{
-		"bench_bugsearch.txt",
 		"bench_short.txt",
 		"bench_expr.txt",
 		"bench_expr_all.txt",
@@ -444,14 +444,16 @@ int main(int argc, const char* argv[])
 	// parser are disqualified for the round. As such it is paramount that
 	// the reference parser be precise when computing expressions.
 	//
-	benchmarks.push_back(std::make_shared<BenchExprTk   >());   // <-- Note: first parser becomes the reference!
-	benchmarks.push_back(std::make_shared<BenchMuParser2>(false));
-//	benchmarks.push_back(std::make_shared<BenchMuParser2>());
+//	benchmarks.push_back(std::make_shared<BenchExprTk   >());   // <-- Note: first parser becomes the reference!
+	benchmarks.push_back(std::make_shared<BenchMuParser226>(false));
+	benchmarks.push_back(std::make_shared<BenchMuParser230>(false));
+//	benchmarks.push_back(std::make_shared<BenchMuParser226>());
+//	benchmarks.push_back(std::make_shared<BenchMuParser230>());
 //	benchmarks.push_back(std::make_shared<BenchMuParser3>());
 
 //	benchmarks.push_back(std::make_shared<BenchMuParserX>());
-	benchmarks.push_back(std::make_shared<BenchATMSP    >());
-	benchmarks.push_back(std::make_shared<BenchFParser  >());
+//	benchmarks.push_back(std::make_shared<BenchATMSP    >());
+//	benchmarks.push_back(std::make_shared<BenchFParser  >());
 //	benchmarks.push_back(std::make_shared<BenchMathExpr >());
 //	benchmarks.push_back(std::make_shared<BenchTinyExpr >());
 
@@ -460,7 +462,7 @@ int main(int argc, const char* argv[])
 #endif
 
 #ifdef ENABLE_METL
-	benchmarks.push_back(std::make_shared<BenchMETL>());
+//	benchmarks.push_back(std::make_shared<BenchMETL>());
 #endif
 
 	Shootout(benchmark_file, benchmarks, vExpr, iCount, writeResultTable);

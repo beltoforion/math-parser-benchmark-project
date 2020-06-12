@@ -31,7 +31,7 @@
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>NotSet</CharacterSet>
     <UseOfMfc>Static</UseOfMfc>
-    <PlatformToolset>ClangCL</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -125,7 +125,7 @@
     <ClInclude Include=".\include\BenchMathExpr.h" />
     <ClInclude Include=".\include\BenchMETL.h" />
     <ClInclude Include=".\include\BenchMTParser.h" />
-    <ClInclude Include=".\include\BenchMuParser2.h" />
+    <ClInclude Include="include\BenchMuParser226.h" />
     <ClInclude Include=".\include\BenchMuParserSSE.h" />
     <ClInclude Include=".\include\BenchMuParserX.h" />
     <ClInclude Include=".\include\BenchTinyExpr.h" />
@@ -168,17 +168,6 @@
     <ClInclude Include=".\mpfr\include\mpir.h" />
     <ClInclude Include=".\mpfr\include\mpirxx.h" />
     <ClInclude Include=".\mpfr\include\mpreal.h" />
-    <ClInclude Include=".\muparser2\muParser.h" />
-    <ClInclude Include=".\muparser2\muParserBase.h" />
-    <ClInclude Include=".\muparser2\muParserBytecode.h" />
-    <ClInclude Include=".\muparser2\muParserCallback.h" />
-    <ClInclude Include=".\muparser2\muParserDef.h" />
-    <ClInclude Include=".\muparser2\muParserError.h" />
-    <ClInclude Include=".\muparser2\muParserFixes.h" />
-    <ClInclude Include=".\muparser2\muParserStack.h" />
-    <ClInclude Include=".\muparser2\muParserTemplateMagic.h" />
-    <ClInclude Include=".\muparser2\muParserToken.h" />
-    <ClInclude Include=".\muparser2\muParserTokenReader.h" />
     <ClInclude Include=".\muparserx\mpDefines.h" />
     <ClInclude Include=".\muparserx\mpError.h" />
     <ClInclude Include=".\muparserx\mpFuncCmplx.h" />
@@ -228,6 +217,30 @@
     <ClInclude Include=".\muparserx\utGeneric.h" />
     <ClInclude Include=".\tinyexpr\tinyexpr.h" />
     <ClInclude Include="BenchMuParser3.h" />
+    <ClInclude Include="include\BenchMuParser230.h" />
+    <ClInclude Include="muparser226\muParser.h" />
+    <ClInclude Include="muparser226\muParserBase.h" />
+    <ClInclude Include="muparser226\muParserBytecode.h" />
+    <ClInclude Include="muparser226\muParserCallback.h" />
+    <ClInclude Include="muparser226\muParserDef.h" />
+    <ClInclude Include="muparser226\muParserDLL.h" />
+    <ClInclude Include="muparser226\muParserError.h" />
+    <ClInclude Include="muparser226\muParserFixes.h" />
+    <ClInclude Include="muparser226\muParserInt.h" />
+    <ClInclude Include="muparser226\muParserTemplateMagic.h" />
+    <ClInclude Include="muparser226\muParserTest.h" />
+    <ClInclude Include="muparser226\muParserToken.h" />
+    <ClInclude Include="muparser226\muParserTokenReader.h" />
+    <ClInclude Include="muparser230\muParser.h" />
+    <ClInclude Include="muparser230\muParserBase.h" />
+    <ClInclude Include="muparser230\muParserBytecode.h" />
+    <ClInclude Include="muparser230\muParserCallback.h" />
+    <ClInclude Include="muparser230\muParserDef.h" />
+    <ClInclude Include="muparser230\muParserError.h" />
+    <ClInclude Include="muparser230\muParserFixes.h" />
+    <ClInclude Include="muparser230\muParserTemplateMagic.h" />
+    <ClInclude Include="muparser230\muParserToken.h" />
+    <ClInclude Include="muparser230\muParserTokenReader.h" />
     <ClInclude Include="muparser3\muParser.h" />
     <ClInclude Include="muparser3\muParserBase.h" />
     <ClInclude Include="muparser3\muParserBytecode.h" />
@@ -249,12 +262,6 @@
     <ClCompile Include=".\libcpuid\recog_amd.c" />
     <ClCompile Include=".\libcpuid\recog_intel.c" />
     <ClCompile Include=".\MathExpr\mathexpr.cpp" />
-    <ClCompile Include=".\muparser2\muParser.cpp" />
-    <ClCompile Include=".\muparser2\muParserBase.cpp" />
-    <ClCompile Include=".\muparser2\muParserBytecode.cpp" />
-    <ClCompile Include=".\muparser2\muParserCallback.cpp" />
-    <ClCompile Include=".\muparser2\muParserError.cpp" />
-    <ClCompile Include=".\muparser2\muParserTokenReader.cpp" />
     <ClCompile Include=".\muparserx\mpError.cpp" />
     <ClCompile Include=".\muparserx\mpFuncCmplx.cpp" />
     <ClCompile Include=".\muparserx\mpFuncCommon.cpp" />
@@ -299,7 +306,22 @@
     <ClCompile Include=".\src\Benchmark.cpp" />
     <ClCompile Include=".\src\BenchMathExpr.cpp" />
     <ClCompile Include=".\src\BenchMETL.cpp" />
-    <ClCompile Include=".\src\BenchMuParser2.cpp" />
+    <ClCompile Include="muparser226\muParser.cpp" />
+    <ClCompile Include="muparser226\muParserBase.cpp" />
+    <ClCompile Include="muparser226\muParserBytecode.cpp" />
+    <ClCompile Include="muparser226\muParserCallback.cpp" />
+    <ClCompile Include="muparser226\muParserDLL.cpp" />
+    <ClCompile Include="muparser226\muParserError.cpp" />
+    <ClCompile Include="muparser226\muParserInt.cpp" />
+    <ClCompile Include="muparser226\muParserTest.cpp" />
+    <ClCompile Include="muparser226\muParserTokenReader.cpp" />
+    <ClCompile Include="muparser230\muParser.cpp" />
+    <ClCompile Include="muparser230\muParserBase.cpp" />
+    <ClCompile Include="muparser230\muParserBytecode.cpp" />
+    <ClCompile Include="muparser230\muParserCallback.cpp" />
+    <ClCompile Include="muparser230\muParserError.cpp" />
+    <ClCompile Include="muparser230\muParserTokenReader.cpp" />
+    <ClCompile Include="src\BenchMuParser226.cpp" />
     <ClCompile Include=".\src\BenchMuParserX.cpp" />
     <ClCompile Include=".\src\BenchTinyExpr.cpp" />
     <ClCompile Include=".\src\cpuid.cpp" />
@@ -308,6 +330,7 @@
     <ClCompile Include=".\src\Stopwatch.cpp" />
     <ClCompile Include=".\tinyexpr\tinyexpr.c" />
     <ClCompile Include="BenchMuParser3.cpp" />
+    <ClCompile Include="src\BenchMuParser230.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\fparser\fparser.hh" />
