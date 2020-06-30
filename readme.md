@@ -12,8 +12,8 @@ expression parsers are part of this benchmark:
 | 03  | [Lepton](https://simtk.org/home/lepton)                   | Peter Eastman                 | [MIT](https://opensource.org/licenses/MIT)                | double                |
 | 04  | [MathExpr](http://www.yann-ollivier.org/mathlib/mathexpr) | Yann Ollivier                 | [Copyright Notice 1997-2000](http://www.yann-ollivier.org/mathlib/mathexpr#C)     | double |
 | 05  | [METL](https://github.com/TillHeinzel/METL)               | Till Heinzel                  | [Apache](https://opensource.org/licenses/Apache-2.0)      | double                |
-| 06  | [muParser](http://muparser.beltoforion.de)                | Ingo Berg                     | [BSD](https://en.wikipedia.org/wiki/BSD_licenses) | double, float, int         |
-| 07  | [muParserX](http://muparserx.beltoforion.de)              | Ingo Berg                     | [BSD](https://en.wikipedia.org/wiki/BSD_licenses) | double, float, matrix, string         |
+| 06  | [muParser](http://beltoforion.de/en/muparser)                | Ingo Berg                     | [BSD](https://en.wikipedia.org/wiki/BSD_licenses) | double, float, int         |
+| 07  | [muParserX](http://beltoforion.de/en/muparserx)              | Ingo Berg                     | [BSD](https://en.wikipedia.org/wiki/BSD_licenses) | double, float, matrix, string         |
 | 08  | [TinyExpr](https://github.com/codeplea/tinyexpr)          | Lewis Van Winkle              | [Zlib](https://opensource.org/licenses/Zlib)              | double                |
 
 
